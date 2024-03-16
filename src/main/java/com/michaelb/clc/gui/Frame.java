@@ -27,7 +27,7 @@ public class Frame extends JFrame implements ComponentListener {
         this(Stage.SPLASH_SCREEN);
     }
 
-    public Frame(Stage stage) {
+    public Frame(final Stage stage) {
         super(LONG_TITLE);
         this.stage = stage;
         setup();
@@ -53,7 +53,7 @@ public class Frame extends JFrame implements ComponentListener {
         }
     }
 
-    public void stage(Stage stage) {
+    public void stage(final Stage stage) {
         this.stage = stage;
     }
 
