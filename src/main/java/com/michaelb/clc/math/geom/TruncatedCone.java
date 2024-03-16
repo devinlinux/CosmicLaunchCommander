@@ -15,7 +15,7 @@ public final class TruncatedCone extends Shape {
     public TruncatedCone(final double baseRadius, final double topRadius, final double height) {
         super(baseRadius, height);
         this.topRadius = topRadius;
-        super.recalc();
+        this.recalc();
     }
 
     @Override
