@@ -30,11 +30,11 @@ public final class Figure3D {
         double surfaceArea = 0.0;
         for (int i = 0; i < this.components.size(); i++) {
             final Shape component = this.components.get(i);
-            if (i == 0)
+            if (i == 0)  //  bottom
                 surfaceArea += component.surfaceArea() - component.topSurfaceArea();
-            else if (i == this.components.size() - 1)
+            else if (i == this.components.size() - 1)  //  top
                 surfaceArea += component.surfaceArea() - component.baseSurfaceArea();
-            else
+            else  //  middle
                 surfaceArea += component.surfaceArea() - component.topSurfaceArea() - component.baseSurfaceArea();
         }
         return surfaceArea;
