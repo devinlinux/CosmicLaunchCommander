@@ -15,7 +15,7 @@ public sealed abstract class Shape permits Cylinder, Cone, TruncatedCone {
         this.recalc();
     }
 
-    protected final void recalc() {
+    protected void recalc() {
         this.volume = this.calcVolume();
         this.surfaceArea = this.calcSurfaceArea();
     }
@@ -25,6 +25,9 @@ public sealed abstract class Shape permits Cylinder, Cone, TruncatedCone {
 
     public double volume() { return this.volume; }
     public double surfaceArea() { return this.surfaceArea; }
+
+    protected abstract double topSurfaceArea();
+    protected abstract double baseSurfaceArea();
 
     public void radius(final double radius) {
         this.radius = radius;

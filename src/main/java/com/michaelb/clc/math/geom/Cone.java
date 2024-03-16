@@ -21,4 +21,10 @@ public final class Cone extends Shape {
         return PI * super.radius *
             (super.radius + root(square(super.height)) + square(super.radius));
     }
+
+    @Override
+    protected double topSurfaceArea() { return 0.0; }
+
+    @Override
+    protected double baseSurfaceArea() { return super.surfaceArea; }
 }
