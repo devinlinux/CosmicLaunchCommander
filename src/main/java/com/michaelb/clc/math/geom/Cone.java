@@ -12,12 +12,12 @@ public final class Cone extends Shape {
     }
 
     @Override
-    public double volume() {
+    protected double calcVolume() {
         return PI * square(super.radius) * (super.height / 3.0);
     }
 
     @Override
-    public double surfaceArea() {
+    protected double calcSurfaceArea() {
         return PI * super.radius *
             (super.radius + root(square(super.height)) + square(super.radius));
     }

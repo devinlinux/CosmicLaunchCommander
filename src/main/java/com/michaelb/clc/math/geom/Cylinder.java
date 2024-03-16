@@ -12,12 +12,12 @@ public final class Cylinder extends Shape {
     }
 
     @Override
-    public double volume() {
+    public double calcVolume() {
         return PI * square(super.radius) * super.height;
     }
 
     @Override
-    public double surfaceArea() {
+    public double calcSurfaceArea() {
         return TAU * super.radius * super.height + TAU * square(super.radius);
     }
 }
