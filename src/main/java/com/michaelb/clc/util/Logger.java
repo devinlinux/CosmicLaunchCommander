@@ -138,4 +138,8 @@ public final class Logger {
             }
         }
     }
+
+    public static void outputStream(PrintStream stream) {
+        outputStream = stream;
+    }
 }
