@@ -22,8 +22,7 @@ public final class Cylinder extends Shape {
     }
 
     @Override
-    protected double topSurfaceArea() { return super.surfaceArea / super.height; }
-
-    @Override
-    protected double baseSurfaceArea() { return super.surfaceArea / super.height; }
+    protected double calcBaseSurfaceArea() {
+        return PI * square(super.radius);
+    }
 }

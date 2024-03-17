@@ -10,7 +10,6 @@ public final class TruncatedCone extends Shape {
     private double topRadius;
 
     private double topSurfaceArea;
-    private double baseSurfaceArea;
 
     public TruncatedCone(final double baseRadius, final double topRadius, final double height) {
         super(baseRadius, height);
@@ -23,7 +22,7 @@ public final class TruncatedCone extends Shape {
         super.volume = calcVolume();
         super.surfaceArea = surfaceArea();
         this.topSurfaceArea = calcTopSurfaceArea();
-        this.baseSurfaceArea = calcBaseSurfaceArea();
+        super.baseSurfaceArea = calcBaseSurfaceArea();
     }
 
     @Override
@@ -40,14 +39,12 @@ public final class TruncatedCone extends Shape {
     @Override
     protected double topSurfaceArea() { return this.topSurfaceArea; }
 
-    @Override
-    protected double baseSurfaceArea() { return this.baseSurfaceArea; }
-
     private double calcTopSurfaceArea() {
         return PI * square(this.topRadius);
     }
 
-    private double calcBaseSurfaceArea() {
+    @Override
+    protected double calcBaseSurfaceArea() {
         return PI * square(super.radius);
     }
 
@@ -64,7 +61,5 @@ public final class TruncatedCone extends Shape {
         this.recalc();
     }
 
-    public double topRadius() {
-        return this.topRadius;
-    }
+    public double topRadius() { return this.topRadius; }
 }

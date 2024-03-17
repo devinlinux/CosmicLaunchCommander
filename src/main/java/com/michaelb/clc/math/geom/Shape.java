@@ -1,12 +1,14 @@
 package com.michaelb.clc.math.geom;
 
-public sealed abstract class Shape permits Cylinder, Cone, TruncatedCone {
+public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, TruncatedCone {
 
     protected double radius;
     protected double height;
 
     protected double volume;
     protected double surfaceArea;
+
+    protected double baseSurfaceArea;
 
     public Shape(final double radius, final double height) {
         this.radius = radius;
@@ -18,16 +20,18 @@ public sealed abstract class Shape permits Cylinder, Cone, TruncatedCone {
     protected void recalc() {
         this.volume = this.calcVolume();
         this.surfaceArea = this.calcSurfaceArea();
+        this.baseSurfaceArea = this.calcBaseSurfaceArea();
     }
 
     protected abstract double calcVolume();
     protected abstract double calcSurfaceArea();
+    protected abstract double calcBaseSurfaceArea();
 
     public double volume() { return this.volume; }
     public double surfaceArea() { return this.surfaceArea; }
 
-    protected abstract double topSurfaceArea();
-    protected abstract double baseSurfaceArea();
+    protected double topSurfaceArea() { return this.baseSurfaceArea; }
+    protected double baseSurfaceArea() { return this.baseSurfaceArea; }
 
     public void radius(final double radius) {
         this.radius = radius;
