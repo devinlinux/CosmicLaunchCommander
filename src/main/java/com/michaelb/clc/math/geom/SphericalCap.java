@@ -27,7 +27,7 @@ public final class SphericalCap extends Shape {
     }
 
     @Override
-    public double topSurfaceArea() {
+    public double topSurfaceArea() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("A Spherical Cap does not have a top surface area");
     }
 }

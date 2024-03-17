@@ -33,12 +33,12 @@ public final class Sphere extends Shape {
     }
 
     @Override
-    public double topSurfaceArea() {
+    public double topSurfaceArea() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("A Sphere does not have a top surface area");
     }
 
     @Override
-    public double baseSurfaceArea() {
+    public double baseSurfaceArea() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("A Sphere does not have a base surface area");
     }
 }

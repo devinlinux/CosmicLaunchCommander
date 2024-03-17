@@ -30,8 +30,8 @@ public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, Trunc
     public double volume() { return this.volume; }
     public double surfaceArea() { return this.surfaceArea; }
 
-    protected double topSurfaceArea() { return this.baseSurfaceArea; }
-    protected double baseSurfaceArea() { return this.baseSurfaceArea; }
+    protected double topSurfaceArea() throws UnsupportedOperationException { return this.baseSurfaceArea; }
+    protected double baseSurfaceArea() throws UnsupportedOperationException { return this.baseSurfaceArea; }
 
     public void radius(final double radius) {
         this.radius = radius;

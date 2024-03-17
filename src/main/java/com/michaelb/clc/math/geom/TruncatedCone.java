@@ -37,7 +37,7 @@ public final class TruncatedCone extends Shape {
     }
 
     @Override
-    protected double topSurfaceArea() { return this.topSurfaceArea; }
+    protected double topSurfaceArea() throws UnsupportedOperationException { return this.topSurfaceArea; }
 
     private double calcTopSurfaceArea() {
         return PI * square(this.topRadius);

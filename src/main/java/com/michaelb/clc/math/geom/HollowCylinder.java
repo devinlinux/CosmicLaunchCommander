@@ -31,12 +31,6 @@ public final class HollowCylinder extends Shape {
         return PI * square(super.radius);
     }
 
-    @Override
-    protected double topSurfaceArea() { return super.baseSurfaceArea; }
-
-    @Override
-    protected double baseSurfaceArea() { return super.baseSurfaceArea; }
-
     public void thickness(final double thickness) {
         this.thickness = thickness;
         this.recalc();
