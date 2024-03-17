@@ -18,7 +18,7 @@ public final class HollowCylinder extends Shape {
     @Override
     protected double calcVolume() {
         return PI * (square(this.thickness) - (2 * this.thickness * super.radius) * super.height) +
-            TAU * square(super.radius) * this.thickness;  //  top and bottom
+            TAU * square(super.radius - 2 * thickness) * this.thickness;  //  top and bottom
     }
 
     @Override
