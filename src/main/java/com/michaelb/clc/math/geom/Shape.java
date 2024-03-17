@@ -1,6 +1,6 @@
 package com.michaelb.clc.math.geom;
 
-public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, TruncatedCone, Sphere {
+public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, TruncatedCone, Sphere, SphericalCap {
 
     protected double radius;
     protected double height;
