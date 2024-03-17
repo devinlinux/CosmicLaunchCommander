@@ -46,8 +46,10 @@ public final class Logger {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
             String fileName = currentTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".log";
-            Files.createDirectory(Paths.get(PREFERRED_LOG_DIRECTORY));
+            if (!Files.exists(Paths.get(PREFERRED_LOG_DIRECTORY)))
+                Files.createDirectory(Paths.get(PREFERRED_LOG_DIRECTORY));
             logFilePath = Files.createFile(Path.of(PREFERRED_LOG_DIRECTORY + fileName));
+            System.out.println(logFilePath.toString());
         } catch (IOException e) {
             System.err.printf("Error creating log file: %s%n", e.getMessage());
         }
