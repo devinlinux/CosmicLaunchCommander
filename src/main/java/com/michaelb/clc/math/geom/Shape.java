@@ -1,6 +1,6 @@
 package com.michaelb.clc.math.geom;
 
-public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, TruncatedCone {
+public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, TruncatedCone, Sphere {
 
     protected double radius;
     protected double height;
@@ -37,6 +37,7 @@ public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, Trunc
         this.radius = radius;
         this.recalc();
     }
+
     public void height(final double height) {
         this.height = height;
         this.recalc();

@@ -6,6 +6,10 @@ public class MathUtil {
         return Math.pow(base, 2);
     }
 
+    public static double cube(double base) {
+        return Math.pow(base, 3);
+    }
+
     public static double root(double n) {
         return Math.sqrt(n);
     }
