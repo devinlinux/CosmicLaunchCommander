@@ -6,6 +6,5 @@ public enum Fuel {
     ETHANOL,
     KEROSENE,
     HYDRAZINE,
-    MMH,
-    UDMH,
+    RP_1,
 }

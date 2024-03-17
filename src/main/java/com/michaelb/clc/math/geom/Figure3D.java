@@ -31,11 +31,11 @@ public final class Figure3D {
         for (int i = 0; i < this.components.size(); i++) {
             final Shape component = this.components.get(i);
             if (i == 0)  //  bottom
-                surfaceArea += component.surfaceArea() - component.topSurfaceArea();
+                surfaceArea += (component.surfaceArea() - component.topSurfaceArea());
             else if (i == this.components.size() - 1)  //  top
-                surfaceArea += component.surfaceArea() - component.baseSurfaceArea();
+                surfaceArea += (component.surfaceArea() - component.baseSurfaceArea());
             else  //  middle
-                surfaceArea += component.surfaceArea() - component.topSurfaceArea() - component.baseSurfaceArea();
+                surfaceArea += (component.surfaceArea() - component.topSurfaceArea() - component.baseSurfaceArea());
         }
         return surfaceArea;
     }

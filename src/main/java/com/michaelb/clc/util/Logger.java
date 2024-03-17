@@ -138,11 +138,11 @@ public final class Logger {
         logCountsMap.clear();
     }
 
-    public static int logCountOf(Level level) {
+    public static int logCountOf(final Level level) {
         return logCountsMap.getOrDefault(level, 0);
     }
 
-    public static void dump(String path) {
+    public static void dump(final String path) {
         for (String logMessage : logMessages) {
             try {
                 Files.write(Path.of(path), logMessage.getBytes(), StandardOpenOption.APPEND);
@@ -152,7 +152,7 @@ public final class Logger {
         }
     }
 
-    public static void outputStream(PrintStream stream) {
+    public static void outputStream(final PrintStream stream) {
         outputStream = stream;
     }
 }
