@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.io.IOException;
 
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
@@ -34,6 +35,8 @@ public final class Logger {
     private static final String PREFERRED_LOG_DIRECTORY = "logs%s".formatted(com.michaelb.clc.util.IOUtils.SEP);
     private static Path logFilePath;
 
+    private static final Logger INSTANCE = null;
+
     static {
         outputStream = null;
         logMessages = new ArrayList<>();
@@ -43,10 +46,18 @@ public final class Logger {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
             String fileName = currentTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".log";
+            Files.createDirectory(Paths.get(PREFERRED_LOG_DIRECTORY));
             logFilePath = Files.createFile(Path.of(PREFERRED_LOG_DIRECTORY + fileName));
         } catch (IOException e) {
             System.err.printf("Error creating log file: %s%n", e.getMessage());
         }
+    }
+
+    public static void init() {
+        if (INSTANCE == null)
+            new Logger();
+        else
+            throw new IllegalStateException("Logger has already been initialized");
     }
 
     public static enum Level {
@@ -68,7 +79,7 @@ public final class Logger {
 
         String coloredLog = "%s    %d    %s    [%s%s%s]: %s%n".formatted(
                 formattedTime,
-                logNumber++,
+                logNumber,
                 cause,
                 level.color,
                 level.toString(),
@@ -76,7 +87,7 @@ public final class Logger {
                 message);
         String colorlessLog = "%s    %d    %s    [%s]: %s%n".formatted(
                 formattedTime,
-                logNumber,
+                logNumber++,
                 cause,
                 level.toString(),
                 message);
@@ -104,19 +115,19 @@ public final class Logger {
     }
 
     public static void progress(final String message, final String cause) {
-        log(Level.PROGRESS, cause, message);
+        log(Level.PROGRESS, message, cause);
     }
 
     public static void info(final String message, final String cause) {
-        log(Level.INFO, cause, message);
+        log(Level.INFO, message, cause);
     }
 
     public static void warn(final String message, final String cause) {
-        log(Level.WARNING, cause, message);
+        log(Level.WARNING, message, cause);
     }
 
     public static void err(final String message, final String cause) {
-        log(Level.ERROR, cause, message);
+        log(Level.ERROR, message, cause);
     }
 
     public static void reset() {
