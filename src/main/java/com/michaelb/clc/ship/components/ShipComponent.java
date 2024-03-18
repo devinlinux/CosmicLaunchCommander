@@ -4,12 +4,18 @@ package com.michaelb.clc.ship.components;
 import com.michaelb.clc.math.geom.Shape;
 import com.michaelb.clc.sci.Material;
 
-public abstract class ShipComponent {
+public abstract sealed class ShipComponent permits FuelTank {
 
     private String name;
 
     private Shape geometry;
     private Material material;
+
+    protected ShipComponent(String name, Shape geometry, Material material) {
+        this.name = name;
+        this.geometry = geometry;
+        this.material = material;
+    }
 
     public void geometry(final Shape geometry) { this.geometry = geometry; }
     public void material(final Material material) { this.material = material; }
