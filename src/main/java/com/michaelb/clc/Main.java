@@ -2,7 +2,6 @@ package com.michaelb.clc;
 
 //  imports
 import javax.swing.SwingUtilities;
-import com.michaelb.clc.math.geom.*;
 
 public interface Main {
     static void main(String... args) {
