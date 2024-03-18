@@ -17,4 +17,11 @@ public abstract class ShipComponent {
     public Shape geometry() { return this.geometry; }
     public Material material() { return this.material; }
     public String name() { return this.name; }
+
+    public abstract void activate();
+    public abstract void deactivate();
+
+    public abstract boolean isFunctional();
+
+    public abstract void exec(Command cmd);
 }
