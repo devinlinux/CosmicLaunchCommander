@@ -11,7 +11,7 @@ public abstract sealed class ShipComponent permits FuelTank {
     private Shape geometry;
     private Material material;
 
-    protected ShipComponent(String name, Shape geometry, Material material) {
+    protected ShipComponent(final String name, final Shape geometry, final Material material) {
         this.name = name;
         this.geometry = geometry;
         this.material = material;
@@ -29,5 +29,5 @@ public abstract sealed class ShipComponent permits FuelTank {
 
     public abstract boolean isFunctional();
 
-    public abstract void exec(Command cmd);
+    public abstract void exec(final Command cmd);
 }

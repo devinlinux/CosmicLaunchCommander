@@ -2,7 +2,8 @@ package com.michaelb.clc.ship.components;
 
 //  imports
 import com.michaelb.clc.math.geom.Cylinder;
-import com.michaelb.clc.sci.Material;;
+import com.michaelb.clc.sci.Material;
+import com.michaelb.clc.util.Logger;
 
 public final class FuelTank extends ShipComponent {
 
@@ -32,6 +33,41 @@ public final class FuelTank extends ShipComponent {
     @Override
     public void exec(Command cmd) { 
         //  TODO: commands
+    }
+
+    public boolean poll(final double amount) { return this.inventory >= amount; }
+
+    private double draw(final double amount) {
+        if (amount < 0) {
+            Logger.err("Cannot draw negative amount from fuel tank", "FuelTank::draw");
+            throw new IllegalArgumentException("Cannot draw negative amount from fuel tank");
+        } else if (this.inventory >= amount) {
+            this.inventory -= amount;
+            Logger.info("Drew %f from %s".formatted(amount, super.name()), "FuelTank::draw");
+            return amount;
+        } else {
+            double got = this.inventory;
+            Logger.info("Drew %.3f from %s".formatted(got, super.name()), "FuelTank::draw");
+            this.inventory = 0;
+            return got;
+        }
+    }
+
+    private double add(final double amount) {
+        if (amount < 0) {
+            Logger.err("Cannot add negative amount to fuel tank", "FuelTank::add");
+            throw new IllegalArgumentException("Cannot add negative amount to fuel tank");
+        } else if (amount > this.capacity - this.inventory) {
+            double room = this.capacity - this.inventory;
+            this.inventory = this.capacity;
+            double surplus = amount - room;
+            Logger.info("Refilled %s with %.3f surplus: ".formatted(super.name(), surplus), "FuelTank::add");
+            return surplus;
+        } else {
+            this.inventory += amount;
+            Logger.info("Added %.2f to %s".formatted(amount, super.name()), "FuelTank::add");
+            return 0;
+        }
     }
 
     public double capacity() { return super.geometry().volume(); }
