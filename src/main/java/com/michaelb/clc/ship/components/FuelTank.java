@@ -1,11 +1,16 @@
 package com.michaelb.clc.ship.components;
 
 //  imports
+import com.michaelb.clc.math.geom.Shape;
 import com.michaelb.clc.math.geom.Cylinder;
 import com.michaelb.clc.sci.Material;
 import com.michaelb.clc.util.Logger;
 
-public final class FuelTank extends ShipComponent {
+public sealed class FuelTank implements ShipComponent permits HeaderTank {
+
+    private String name;
+    private Shape geometry;
+    private Material material;
 
     private boolean canDraw;
 
@@ -13,7 +18,9 @@ public final class FuelTank extends ShipComponent {
     private final double capacity;
 
     public FuelTank(final String name, final double radius, final double height, final Material material) {
-        super(name, new Cylinder(radius, height), material);
+        this.name = name;
+        this.geometry = new Cylinder(radius, height);
+        this.material = material;
 
         this.canDraw = true;
         this.capacity = (this.inventory = super.geometry().volume());
