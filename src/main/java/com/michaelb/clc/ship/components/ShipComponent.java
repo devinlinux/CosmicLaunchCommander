@@ -6,6 +6,8 @@ import com.michaelb.clc.sci.Material;
 
 public abstract class ShipComponent {
 
+    private String name;
+
     private Shape geometry;
     private Material material;
 
@@ -14,4 +16,5 @@ public abstract class ShipComponent {
 
     public Shape geometry() { return this.geometry; }
     public Material material() { return this.material; }
+    public String name() { return this.name; }
 }

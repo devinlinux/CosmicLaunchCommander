@@ -35,7 +35,7 @@ public final class Logger {
     private static final String PREFERRED_LOG_DIRECTORY = "logs%s".formatted(com.michaelb.clc.util.IOUtils.SEP);
     private static Path logFilePath;
 
-    private static final Logger INSTANCE = null;
+    private static Logger INSTANCE = null;
 
     static {
         outputStream = null;
@@ -46,8 +46,9 @@ public final class Logger {
         try {
             LocalDateTime currentTime = LocalDateTime.now();
             String fileName = currentTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".log";
-            if (!Files.exists(Paths.get(PREFERRED_LOG_DIRECTORY)))
-                Files.createDirectory(Paths.get(PREFERRED_LOG_DIRECTORY));
+            Path dir = Paths.get(PREFERRED_LOG_DIRECTORY);
+            if (!Files.exists(dir))
+                Files.createDirectory(dir);
             logFilePath = Files.createFile(Path.of(PREFERRED_LOG_DIRECTORY + fileName));
             System.out.println(logFilePath.toString());
         } catch (IOException e) {
@@ -57,12 +58,12 @@ public final class Logger {
 
     public static void init() {
         if (INSTANCE == null)
-            new Logger();
+            INSTANCE = new Logger();
         else
             throw new IllegalStateException("Logger has already been initialized");
     }
 
-    public static enum Level {
+    public enum Level {
         PROGRESS(ANSI_GREEN),
         INFO(ANSI_BLUE),
         WARNING(ANSI_YELLOW),
@@ -133,7 +134,7 @@ public final class Logger {
     }
 
     public static void reset() {
-        info("Reseting logs", "Logger::reset");
+        info("Resetting logs", "Logger::reset");
         logNumber = 1;
         logCountsMap.clear();
     }
