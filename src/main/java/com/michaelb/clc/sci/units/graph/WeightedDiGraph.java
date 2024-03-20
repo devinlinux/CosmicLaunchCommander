@@ -30,7 +30,7 @@ public abstract class WeightedDiGraph<T> {
             Arrays.stream(components)
                 .skip(1)
                 .skip(components.length - 1)
-                
+                .forEach()
         }
     }
     
