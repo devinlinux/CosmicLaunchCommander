@@ -1,7 +1,6 @@
 package com.michaelb.clc.ship.components;
 
 //  imports
-import com.michaelb.clc.math.geom.Shape;
 import com.michaelb.clc.math.geom.Sphere;
 import com.michaelb.clc.sci.Material;
 

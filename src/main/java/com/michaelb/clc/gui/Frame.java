@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
+import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
 
 import static com.michaelb.clc.util.IOUtils.SEP;
@@ -32,6 +33,8 @@ public class Frame extends JFrame implements ComponentListener {
         this.stage = stage;
         setup();
         display();
+
+        Logger.info("Created new Frame: %s".formatted(super.getName()), "Frame::new");
     }
 
     private void setup() {
