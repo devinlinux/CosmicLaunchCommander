@@ -31,6 +31,16 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
     }
 
     @Override
+    public double dryMass() {
+        return this.geometry().surfaceArea() * this.material().density();  //  FIXME: need unit conversion to go from m^2 to m^3
+    }
+
+    @Override
+    public double wetMass() {
+        return this.dryMass() + this.capacity * this.material().density();  //  FIXME: use fuel instead of material, units for capacity
+    }
+
+    @Override
     public void activate() { this.canDraw = true; }
 
     @Override

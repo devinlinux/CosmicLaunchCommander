@@ -18,4 +18,8 @@ public class Stage {
     public double externalMass() {
         return externalGeometry.volume() * externalMaterial.density();
     }
+
+    public double internalMass() {
+        return 0.0;
+    }
 }

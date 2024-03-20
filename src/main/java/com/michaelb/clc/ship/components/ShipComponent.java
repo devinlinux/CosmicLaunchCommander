@@ -6,10 +6,12 @@ import com.michaelb.clc.sci.Material;
 
 public interface ShipComponent {
 
-    String name();
+    double dryMass();
+    double wetMass();
 
     void material(final Material material);
 
+    String name();
     Shape geometry();
     Material material();
 
