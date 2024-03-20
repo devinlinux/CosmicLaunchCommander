@@ -1,13 +1,9 @@
 package com.michaelb.clc;
 
-//  imports
-import javax.swing.SwingUtilities;
-
 public interface Main {
     static void main(String... args) {
         initLogger();
-        SwingUtilities.invokeLater(() ->
-            new com.michaelb.clc.gui.Frame());
+        javax.swing.SwingUtilities.invokeLater(com.michaelb.clc.gui.Frame::new);
     }
 
     private static void initLogger() {
