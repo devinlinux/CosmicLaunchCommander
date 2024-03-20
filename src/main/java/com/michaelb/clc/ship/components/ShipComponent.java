@@ -6,11 +6,12 @@ import com.michaelb.clc.sci.Material;
 
 public interface ShipComponent {
 
+    String name();
+
     void material(final Material material);
 
     Shape geometry();
     Material material();
-    String name();
 
     void activate();
     void deactivate();

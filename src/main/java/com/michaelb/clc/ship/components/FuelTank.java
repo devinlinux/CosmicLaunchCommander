@@ -23,7 +23,7 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
         this.material = material;
 
         this.canDraw = true;
-        this.capacity = (this.inventory = super.geometry().volume());
+        this.capacity = (this.inventory = this.geometry().volume());
     }
 
     @Override
@@ -50,11 +50,11 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
             throw new IllegalArgumentException("Cannot draw negative amount from fuel tank");
         } else if (this.inventory >= amount) {
             this.inventory -= amount;
-            Logger.info("Drew %f from %s".formatted(amount, super.name()), "FuelTank::draw");
+            Logger.info("Drew %f from %s".formatted(amount, this.name()), "FuelTank::draw");
             return amount;
         } else {
             double got = this.inventory;
-            Logger.info("Drew %.3f from %s".formatted(got, super.name()), "FuelTank::draw");
+            Logger.info("Drew %.3f from %s".formatted(got, this.name()), "FuelTank::draw");
             this.inventory = 0;
             return got;
         }
@@ -68,16 +68,28 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
             double room = this.capacity - this.inventory;
             this.inventory = this.capacity;
             double surplus = amount - room;
-            Logger.info("Refilled %s with %.3f surplus: ".formatted(super.name(), surplus), "FuelTank::add");
+            Logger.info("Refilled %s with %.3f surplus: ".formatted(this.name(), surplus), "FuelTank::add");
             return surplus;
         } else {
             this.inventory += amount;
-            Logger.info("Added %.2f to %s".formatted(amount, super.name()), "FuelTank::add");
+            Logger.info("Added %.2f to %s".formatted(amount, this.name()), "FuelTank::add");
             return 0;
         }
     }
 
-    public double capacity() { return super.geometry().volume(); }
+    @Override
+    public void material(Material material) { this.material = material; }
+
+    @Override
+    public String name() { return this.name; }
+
+    @Override
+    public Material material() { return this.material; }
+
+    @Override
+    public Shape geometry() { return this.geometry; }
+
+    public double capacity() { return this.geometry().volume(); }
     public double inventory() { return this.inventory; }
     public double percentRemaining() { return this.inventory / this.capacity; }
 }
