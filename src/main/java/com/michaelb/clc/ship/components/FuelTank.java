@@ -8,8 +8,8 @@ import com.michaelb.clc.util.Logger;
 
 public sealed class FuelTank implements ShipComponent permits HeaderTank {
 
-    private String name;
-    private Shape geometry;
+    private final String name;
+    private final Shape geometry;
     private Material material;
 
     private boolean canDraw;

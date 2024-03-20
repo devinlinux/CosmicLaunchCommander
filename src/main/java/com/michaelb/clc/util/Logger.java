@@ -28,14 +28,14 @@ public final class Logger {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss:SSS");
 
     private static PrintStream outputStream;
-    private static List<String> logMessages;
-    private static Map<Level, Integer> logCountsMap;
+    private static final List<String> logMessages;
+    private static final Map<Level, Integer> logCountsMap;
     private static int logNumber;
 
     private static final String PREFERRED_LOG_DIRECTORY = "logs%s".formatted(com.michaelb.clc.util.IOUtils.SEP);
     private static Path logFilePath;
 
-    private static Logger INSTANCE = null;
+    private static boolean INSTANCE = false;
 
     static {
         outputStream = null;
@@ -50,15 +50,14 @@ public final class Logger {
             if (!Files.exists(dir))
                 Files.createDirectory(dir);
             logFilePath = Files.createFile(Path.of(PREFERRED_LOG_DIRECTORY + fileName));
-            System.out.println(logFilePath.toString());
         } catch (IOException e) {
             System.err.printf("Error creating log file: %s%n", e.getMessage());
         }
     }
 
     public static void init() {
-        if (INSTANCE == null)
-            INSTANCE = new Logger();
+        if (!INSTANCE)
+            INSTANCE = true;
         else
             throw new IllegalStateException("Logger has already been initialized");
     }

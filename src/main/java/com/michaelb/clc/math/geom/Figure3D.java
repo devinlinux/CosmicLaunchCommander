@@ -8,7 +8,7 @@ import com.michaelb.clc.util.Logger;
 
 public final class Figure3D {
 
-    private List<Shape> components;
+    private final List<Shape> components;
     private double volume;
     private double surfaceArea;
 
@@ -24,7 +24,7 @@ public final class Figure3D {
 
     private double calcVolume() {
         return this.components.stream()
-            .mapToDouble(shape -> shape.volume())
+            .mapToDouble(Shape::volume)
             .sum();
     }
 

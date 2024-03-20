@@ -1,6 +1,6 @@
 package com.michaelb.clc.math;
 
-/* Math methods for convinience */
+/* Math methods for convenience */
 public class MathUtil {
     public static double square(double base) {
         return Math.pow(base, 2);

@@ -14,7 +14,7 @@ import static com.michaelb.clc.util.IOUtils.SEP;
 public class Frame extends JFrame implements ComponentListener {
 
     private static final String LONG_TITLE = "Cosmic Launch Commander %s".formatted(ProgramInfo.VERSION);
-    private static final String SHORT_TITLE = "CLC %s".formatted(ProgramInfo.VERSION);;
+    private static final String SHORT_TITLE = "CLC %s".formatted(ProgramInfo.VERSION);
 
     private static final int INIT_WIDTH = 1700;
     private static final int INIT_HEIGHT = 1000;
