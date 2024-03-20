@@ -1,5 +1,8 @@
 package com.michaelb.clc.math.geom;
 
+//  imports
+import com.michaelb.clc.util.Logger;
+
 public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, TruncatedCone, Sphere, SphericalCap {
 
     protected double radius;
@@ -11,6 +14,10 @@ public sealed abstract class Shape permits Cylinder, HollowCylinder, Cone, Trunc
     protected double baseSurfaceArea;
 
     public Shape(final double radius, final double height) {
+        if (radius <= 0.0 || height <= 0.0) {
+            Logger.err("Radius and height must be positive", "Shape::new");
+            throw new IllegalArgumentException("Radius and height must be positive");
+        }
         this.radius = radius;
         this.height = height;
 
