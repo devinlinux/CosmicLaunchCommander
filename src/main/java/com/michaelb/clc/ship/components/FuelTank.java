@@ -18,8 +18,12 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
     private final double capacity;
 
     public FuelTank(final String name, final double radius, final double height, final Material material) {
-        this.name = name;
-        this.geometry = new Cylinder(radius, height);
+        this(name, new Cylinder(radius, height), material);
+    }
+
+    public FuelTank(final String name, final Shape geometry, final Material material) {
+        this.name =name;
+        this.geometry = geometry;
         this.material = material;
 
         this.canDraw = true;
@@ -44,7 +48,7 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
 
     public boolean poll(final double amount) { return this.inventory >= amount; }
 
-    private double draw(final double amount) {
+    protected double draw(final double amount) {
         if (amount < 0) {
             Logger.err("Cannot draw negative amount from fuel tank", "FuelTank::draw");
             throw new IllegalArgumentException("Cannot draw negative amount from fuel tank");
@@ -60,7 +64,7 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
         }
     }
 
-    private double add(final double amount) {
+    protected double add(final double amount) {
         if (amount < 0) {
             Logger.err("Cannot add negative amount to fuel tank", "FuelTank::add");
             throw new IllegalArgumentException("Cannot add negative amount to fuel tank");
