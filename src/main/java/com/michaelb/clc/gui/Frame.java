@@ -10,6 +10,8 @@ import java.awt.event.ComponentListener;
 import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
 
+import com.michaelb.clc.gui.panels.MainScreen;
+
 import static com.michaelb.clc.util.IOUtils.SEP;
 
 public class Frame extends JFrame implements ComponentListener {
@@ -25,7 +27,8 @@ public class Frame extends JFrame implements ComponentListener {
     private Stage stage;
 
     public Frame() {
-        this(Stage.SPLASH_SCREEN);
+        //this(Stage.SPLASH_SCREEN);
+        this(Stage.MAIN);
     }
 
     public Frame(final Stage stage) {
@@ -50,7 +53,7 @@ public class Frame extends JFrame implements ComponentListener {
         switch (this.stage) {
             case SPLASH_SCREEN -> System.out.println("add(new SplashScreen())");
             case LOGIN -> System.out.println("add(new LoginSceren())");
-            case MAIN -> System.out.println("add(new MainScreen())");
+            case MAIN -> this.add(new MainScreen());
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
         }
