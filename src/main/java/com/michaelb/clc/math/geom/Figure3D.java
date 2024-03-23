@@ -4,8 +4,6 @@ package com.michaelb.clc.math.geom;
 import java.util.Arrays;
 import java.util.List;
 
-import com.michaelb.clc.util.Logger;
-
 public final class Figure3D {
 
     private final List<Shape> components;
@@ -40,8 +38,6 @@ public final class Figure3D {
                 try {
                     surfaceArea += (component.surfaceArea() - component.topSurfaceArea() - component.baseSurfaceArea());
                 } catch (UnsupportedOperationException e) {
-                    Logger.err("Cannot use %s as a middle section".formatted(component.getClass().getSimpleName()),
-                                "Figure3D::calcSurfaceArea");
                     surfaceArea = -1.0;
                     break;
                 }

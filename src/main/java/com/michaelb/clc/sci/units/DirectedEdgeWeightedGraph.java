@@ -10,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import com.michaelb.clc.util.Logger;
-
 import static com.michaelb.clc.math.MathUtil.inv;
 
 public abstract class DirectedEdgeWeightedGraph<T> {

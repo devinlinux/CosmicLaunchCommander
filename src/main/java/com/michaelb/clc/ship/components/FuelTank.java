@@ -4,7 +4,6 @@ package com.michaelb.clc.ship.components;
 import com.michaelb.clc.math.geom.Shape;
 import com.michaelb.clc.math.geom.Cylinder;
 import com.michaelb.clc.sci.Material;
-import com.michaelb.clc.util.Logger;
 
 public sealed class FuelTank implements ShipComponent permits HeaderTank {
 
@@ -60,15 +59,12 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
 
     protected double draw(final double amount) {
         if (amount < 0) {
-            Logger.err("Cannot draw negative amount from fuel tank", "FuelTank::draw");
             throw new IllegalArgumentException("Cannot draw negative amount from fuel tank");
         } else if (this.inventory >= amount) {
             this.inventory -= amount;
-            Logger.info("Drew %f from %s".formatted(amount, this.name()), "FuelTank::draw");
             return amount;
         } else {
             double got = this.inventory;
-            Logger.info("Drew %.3f from %s".formatted(got, this.name()), "FuelTank::draw");
             this.inventory = 0;
             return got;
         }
@@ -76,17 +72,14 @@ public sealed class FuelTank implements ShipComponent permits HeaderTank {
 
     protected double add(final double amount) {
         if (amount < 0) {
-            Logger.err("Cannot add negative amount to fuel tank", "FuelTank::add");
             throw new IllegalArgumentException("Cannot add negative amount to fuel tank");
         } else if (amount > this.capacity - this.inventory) {
             double room = this.capacity - this.inventory;
             this.inventory = this.capacity;
             double surplus = amount - room;
-            Logger.info("Refilled %s with %.3f surplus: ".formatted(this.name(), surplus), "FuelTank::add");
             return surplus;
         } else {
             this.inventory += amount;
-            Logger.info("Added %.2f to %s".formatted(amount, this.name()), "FuelTank::add");
             return 0;
         }
     }
