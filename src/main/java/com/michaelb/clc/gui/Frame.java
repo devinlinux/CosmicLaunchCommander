@@ -53,7 +53,7 @@ public class Frame extends JFrame implements ComponentListener {
         switch (this.stage) {
             case SPLASH_SCREEN -> System.out.println("add(new SplashScreen())");
             case LOGIN -> System.out.println("add(new LoginSceren())");
-            case MAIN -> this.add(new MainScreen());
+            case MAIN -> this.add(new MainScreen(this));
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
         }
