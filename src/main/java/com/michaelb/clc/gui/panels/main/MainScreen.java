@@ -22,7 +22,6 @@ import java.util.Random;
 import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.components.Button.ButtonBuilder;
 import com.michaelb.clc.gui.components.AdvancedButton.AdvancedButtonBuilder;
-import com.michaelb.clc.gui.components.AdvancedButton.PanelAnimation;
 
 public class MainScreen extends JPanel implements ComponentListener {
 
@@ -90,6 +89,7 @@ public class MainScreen extends JPanel implements ComponentListener {
     private void configurePanel() {
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.setLayout(new GridBagLayout());
+        this.addComponentListener(this);
     }
 
     private void addButtons() {

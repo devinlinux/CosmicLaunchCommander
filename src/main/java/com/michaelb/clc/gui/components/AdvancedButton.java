@@ -3,7 +3,6 @@ package com.michaelb.clc.gui.components;
 //  imports
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.BorderFactory;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -68,8 +67,6 @@ public final class AdvancedButton extends JPanel implements MouseListener {
 
         this.add(buttonText);
         this.setVisible(true);
-
-        this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         this.addMouseListener(this);
     }

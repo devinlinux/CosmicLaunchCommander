@@ -4,6 +4,7 @@ package com.michaelb.clc.gui;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 
+import java.awt.BorderLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -41,20 +42,21 @@ public class Frame extends JFrame implements ComponentListener {
     }
 
     private void setup() {
-        super.setTitle(LONG_TITLE);
-        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        super.setSize(INIT_WIDTH, INIT_HEIGHT);
-        super.setIconImage(ICON.getImage());
-        super.setLocationRelativeTo(null);
-        super.addComponentListener(this);
-        super.setVisible(true);
+        this.setTitle(LONG_TITLE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(INIT_WIDTH, INIT_HEIGHT);
+        this.setIconImage(ICON.getImage());
+        this.setLocationRelativeTo(null);
+        this.addComponentListener(this);
+        this.setLayout(new BorderLayout());
+        this.setVisible(true);
     }
 
     private void display() {
         switch (this.stage) {
             case SPLASH_SCREEN -> System.out.println("add(new SplashScreen())");
             case LOGIN -> System.out.println("add(new LoginSceren())");
-            case MAIN -> this.add(new MainScreen(this));
+            case MAIN -> this.add(new MainScreen(this), BorderLayout.CENTER);
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
         }
@@ -69,7 +71,7 @@ public class Frame extends JFrame implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        super.setTitle(super.getWidth() <= 300 ? SHORT_TITLE : LONG_TITLE);
+        this.setTitle(super.getWidth() <= 300 ? SHORT_TITLE : LONG_TITLE);
     }
 
     @Override
