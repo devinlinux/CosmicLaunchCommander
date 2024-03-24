@@ -14,16 +14,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.michaelb.clc.gui.Frame;
+import com.michaelb.clc.gui.components.Button.ButtonBuilder;;
 
 public class MainScreen extends JPanel {
 
-    private static final Color BACKGROUND_COLOR = Color.BLACK;
+    private static final Color BACKGROUND_COLOR = Color.GREEN;
 
     private Frame context;
 
     public MainScreen(Frame context) {
         this.context = context;
         this.configurePanel();
+        this.addButtons();
     }
 
     private void configurePanel() {
@@ -36,6 +38,19 @@ public class MainScreen extends JPanel {
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JPanel buttons = new JPanel(new GridBagLayout());
+
+        add(new ButtonBuilder()
+                .withText("Construct New Rocket")
+                .build(), gbc);
+
+        add(new ButtonBuilder()
+                .withText("Launch Rocket")
+                .build(), gbc);
+
+        gbc.weighty = 1;
+        add(buttons, gbc);
     }
 
     @Override
