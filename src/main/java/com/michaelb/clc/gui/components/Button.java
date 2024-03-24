@@ -22,14 +22,11 @@ public final class Button extends JPanel {
     private final Color background;
     private final Color hoverColor;
 
-    private final boolean transparent;
-
     private final Dimension dimension;
     private final ActionListener listener;
 
     private Button(final String text, final Font font, final Color foreground, final Color background,
-                   final Color hoverColor, final boolean transparent, final Dimension dimension,
-                   final ActionListener listener) {
+                   final Color hoverColor, final Dimension dimension, final ActionListener listener) {
         this.text = text;
         this.font = font;
 
@@ -37,17 +34,11 @@ public final class Button extends JPanel {
         this.background = background;
         this.hoverColor = hoverColor;
 
-        this.transparent = transparent;
-
         this.dimension = dimension;
         this.listener = listener;
 
         add(createButton());
-
-        if (!transparent)
-            this.setBackground(background);
-        else
-            this.setOpaque(false);
+        this.setBackground(background);
     }
 
     private JButton createButton() {
@@ -82,12 +73,6 @@ public final class Button extends JPanel {
             }
         });
 
-        if (this.transparent) {
-            button.setOpaque(false);
-            button.setContentAreaFilled(false);
-            button.setBorderPainted(false);
-        }
-
         return button;
     }
 
@@ -100,8 +85,6 @@ public final class Button extends JPanel {
         private Color background;
         private Color hoverColor;
 
-        private boolean transparent;
-
         private Dimension dimension;
         private ActionListener listener;
 
@@ -112,8 +95,6 @@ public final class Button extends JPanel {
             this.foreground = Color.GREEN;
             this.background = Color.BLACK;
             this.hoverColor = Color.BLACK;
-
-            this.transparent = false;
 
             this.dimension = new Dimension(250, 50);
             this.listener = null;
@@ -144,11 +125,6 @@ public final class Button extends JPanel {
             return this;
         }
 
-        public ButtonBuilder withTransparency() {
-            this.transparent = true;
-            return this;
-        }
-
         public ButtonBuilder withDimension(final Dimension dimension) {
             this.dimension = dimension;
             return this;
@@ -166,7 +142,6 @@ public final class Button extends JPanel {
                     this.foreground,
                     this.background,
                     this.hoverColor,
-                    this.transparent,
                     this.dimension,
                     this.listener);
         }

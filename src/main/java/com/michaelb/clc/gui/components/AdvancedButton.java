@@ -63,11 +63,6 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         JLabel buttonText = new JLabel(this.text);
         buttonText.setFont(this.font);
         buttonText.setForeground(this.foreground);
-
-        buttonText.setMinimumSize(this.dimension);
-        buttonText.setPreferredSize(this.dimension);
-        buttonText.setMaximumSize(this.dimension);
-
         buttonText.setOpaque(false);
 
         this.add(buttonText);
@@ -142,7 +137,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
                 g.fillRect(0, 0, width, height);
             };
             this.hoverAnimation = (g, width, height) -> {
-                g.setColor(Color.LIGHT_GRAY);
+                g.setColor(Color.DARK_GRAY);
                 g.fillRect(0, 0, width, height);
             };
 
