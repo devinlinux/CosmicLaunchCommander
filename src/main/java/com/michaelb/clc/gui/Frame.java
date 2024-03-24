@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentAdapter;
+import java.awt.Component;
 
 import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
@@ -72,5 +73,16 @@ public class Frame extends JFrame {
 
     public void stage(final Stage stage) {
         this.stage = stage;
+
+        clearComponents();
+        display();
+    }
+
+    private void clearComponents() {
+        for (Component component : this.getContentPane().getComponents())
+            this.getContentPane().remove(component);
+
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
     }
 }

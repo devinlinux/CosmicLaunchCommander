@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.michaelb.clc.gui.Frame;
+import com.michaelb.clc.gui.Stage;
 import com.michaelb.clc.gui.components.Button.ButtonBuilder;
 
 public class MainScreen extends JPanel {
@@ -115,6 +116,9 @@ public class MainScreen extends JPanel {
         buttons.add(new ButtonBuilder()
                 .withText("Manage Complex")
                 .withHoverColor(Color.DARK_GRAY)
+                .withActionListener(e -> {
+                    context.stage(Stage.COMPLEX);
+                })
                 .build(), gbc);
 
         gbc.weighty = 1;
