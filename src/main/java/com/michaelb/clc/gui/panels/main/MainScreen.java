@@ -1,4 +1,4 @@
-package com.michaelb.clc.gui.panels;
+package com.michaelb.clc.gui.panels.main;
 
 //  imports
 import javax.swing.JPanel;
@@ -16,16 +16,16 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 import com.michaelb.clc.gui.Frame;
-import com.michaelb.clc.gui.components.Button.ButtonBuilder;;
+import com.michaelb.clc.gui.components.Button.ButtonBuilder;
 
 public class MainScreen extends JPanel {
 
     private static final Color BACKGROUND_COLOR = Color.BLACK;
 
-    private Frame context;
-    private Random rand;
+    private final Frame context;
+    private final Random rand;
 
-    public MainScreen(Frame context) {
+    public MainScreen(final Frame context) {
         this.context = context;
         this.rand = new Random();
 
@@ -61,7 +61,7 @@ public class MainScreen extends JPanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(final Graphics g) {
 
         Graphics2D g2D = (Graphics2D) g;
 

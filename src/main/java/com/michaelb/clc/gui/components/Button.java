@@ -15,17 +15,18 @@ import java.awt.event.MouseEvent;
 
 public class Button extends JPanel {
 
-    private String text;
-    private Font font;
+    private final String text;
+    private final Font font;
 
-    private Color foreground;
-    private Color background;
-    private Color hoverColor;
+    private final Color foreground;
+    private final Color background;
+    private final Color hoverColor;
 
-    private Dimension dimension;
-    private ActionListener listener;
+    private final Dimension dimension;
+    private final ActionListener listener;
 
-    private Button(String text, Font font, Color foreground, Color background, Color hoverColor, Dimension dimension, ActionListener listener) {
+    private Button(final String text, final Font font, final Color foreground, final Color background,
+                   final Color hoverColor, final Dimension dimension, final ActionListener listener) {
         this.text = text;
         this.font = font;
 
@@ -62,12 +63,12 @@ public class Button extends JPanel {
 
         button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
+            public void mouseEntered(final MouseEvent e) {
                 button.setBackground(hoverColor);
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(final MouseEvent e) {
                 button.setBackground(background);
             }
         });
@@ -99,37 +100,37 @@ public class Button extends JPanel {
             this.listener = null;
         }
 
-        public ButtonBuilder withText(String text) {
+        public ButtonBuilder withText(final String text) {
             this.text = text;
             return this;
         }
 
-        public ButtonBuilder withFont(Font font) {
+        public ButtonBuilder withFont(final Font font) {
             this.font = font;
             return this;
         }
 
-        public ButtonBuilder withForeground(Color foreground) {
+        public ButtonBuilder withForeground(final Color foreground) {
             this.foreground = foreground;
             return this;
         }
 
-        public ButtonBuilder withBackground(Color background) {
+        public ButtonBuilder withBackground(final Color background) {
             this.background = background;
             return this;
         }
 
-        public ButtonBuilder withHoverColor(Color color) {
+        public ButtonBuilder withHoverColor(final Color color) {
             this.hoverColor = color;
             return this;
         }
 
-        public ButtonBuilder withDimension(Dimension dimension) {
+        public ButtonBuilder withDimension(final Dimension dimension) {
             this.dimension = dimension;
             return this;
         }
 
-        public ButtonBuilder withActionListener(ActionListener listener) {
+        public ButtonBuilder withActionListener(final ActionListener listener) {
             this.listener = listener;
             return this;
         }

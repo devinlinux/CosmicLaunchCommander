@@ -10,7 +10,7 @@ import java.awt.event.ComponentListener;
 import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
 
-import com.michaelb.clc.gui.panels.MainScreen;
+import com.michaelb.clc.gui.panels.main.MainScreen;
 
 import static com.michaelb.clc.util.IOUtils.SEP;
 
