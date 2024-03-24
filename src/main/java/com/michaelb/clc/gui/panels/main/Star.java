@@ -4,6 +4,7 @@ package com.michaelb.clc.gui.panels.main;
 import java.util.Random;
 
 import java.awt.Graphics;
+import java.awt.Color;
 
 public class Star {
 
@@ -43,5 +44,11 @@ public class Star {
                 fading = true;
             }
         }
+    }
+
+    public void draw(Graphics g) {
+        int alpha = fading ? 255 * (fadeDuration - fadeStep) / fadeDuration : 255;
+        g.setColor(new Color(255, 255, 255, alpha));
+        g.fillOval(x - size / 2, y - size / 2, size, size);
     }
 }
