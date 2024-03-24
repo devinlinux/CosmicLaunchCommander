@@ -18,7 +18,7 @@ import com.michaelb.clc.gui.components.Button.ButtonBuilder;;
 
 public class MainScreen extends JPanel {
 
-    private static final Color BACKGROUND_COLOR = Color.GREEN;
+    private static final Color BACKGROUND_COLOR = Color.BLACK;
 
     private Frame context;
 
@@ -43,10 +43,12 @@ public class MainScreen extends JPanel {
 
         buttons.add(new ButtonBuilder()
                 .withText("Construct New Rocket")
+                .withHoverColor(Color.DARK_GRAY)
                 .build(), gbc);
 
         buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
+                .withHoverColor(Color.DARK_GRAY)
                 .build(), gbc);
 
         gbc.weighty = 1;
@@ -60,5 +62,7 @@ public class MainScreen extends JPanel {
 
         g2D.setColor(BACKGROUND_COLOR);
         g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+        //  TODO: star fade-in-out animation - opacity?
     }
 }
