@@ -6,7 +6,7 @@
 
   <groupId>com.michaelb.clc</groupId>
   <artifactId>clc</artifactId>
-  <version>0.0:dev</version>
+  <version>0.0-dev</version>
 
   <name>clc</name>
 
