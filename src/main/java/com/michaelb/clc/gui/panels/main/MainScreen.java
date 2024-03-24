@@ -7,7 +7,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
@@ -20,7 +19,6 @@ import java.util.Random;
 
 import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.components.Button.ButtonBuilder;
-import com.michaelb.clc.gui.components.AdvancedButton.AdvancedButtonBuilder;
 
 public class MainScreen extends JPanel {
 
@@ -112,29 +110,6 @@ public class MainScreen extends JPanel {
         buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
                 .withHoverColor(Color.DARK_GRAY)
-                .build(), gbc);
-
-        buttons.add(new AdvancedButtonBuilder()
-                .withText("Advanced Button Test")
-                .withHoverAnimation((g, x, y, width, height) -> {
-                    g.setColor(Color.BLACK);
-                    g.fillRect(x, y, width, height);
-
-                    int numStars = 200;
-                    List<Star3D> starfield = new ArrayList<>(numStars);
-
-                    for (int i = 0; i < numStars; i++) {
-                        starfield.add(new Star3D(rand.nextDouble() * width - width / 2,
-                                             rand.nextDouble() * height - height / 2,
-                                             rand.nextDouble() * width,
-                                             1));
-                    }
-
-                    for (Star3D star : starfield) {
-                        star.update(width, height);
-                        star.draw(g, x, y, width, height);
-                    }
-                })
                 .build(), gbc);
 
         buttons.add(new ButtonBuilder()
