@@ -37,15 +37,15 @@ public class MainScreen extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JPanel buttons = new JPanel(new GridBagLayout());
 
-        add(new ButtonBuilder()
+        buttons.add(new ButtonBuilder()
                 .withText("Construct New Rocket")
                 .build(), gbc);
 
-        add(new ButtonBuilder()
+        buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
                 .build(), gbc);
 
