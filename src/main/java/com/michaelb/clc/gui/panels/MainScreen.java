@@ -37,7 +37,7 @@ public class MainScreen extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.VERTICAL;
 
         JPanel buttons = new JPanel(new GridBagLayout());
 

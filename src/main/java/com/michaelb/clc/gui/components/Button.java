@@ -15,31 +15,26 @@ import java.awt.event.MouseEvent;
 
 public class Button extends JPanel {
 
-    private static final Font DEFAULT_FONT = new JButton().getFont();
-
-    private static final Color DEFAULT_FOREGROUND = Color.GREEN;
-    private static final Color DEFAULT_BACKGROUND = Color.BLACK;
-
-    private static final Dimension DEFAULT_DIMENSION = new Dimension(250, 50);
-
     private String text;
     private Font font;
 
     private Color foreground;
     private Color background;
+    private Color hoverColor;
 
     private Dimension dimension;
+    private ActionListener listener;
 
-    private JButton button;
-
-    private Button(String text, Font font, Color foreground, Color background, Dimension dimension) {
+    private Button(String text, Font font, Color foreground, Color background, Color hoverColor, Dimension dimension, ActionListener listener) {
         this.text = text;
         this.font = font;
 
         this.foreground = foreground;
         this.background = background;
+        this.hoverColor = hoverColor;
 
         this.dimension = dimension;
+        this.listener = listener;
 
         add(createButton());
         this.setBackground(background);
@@ -62,14 +57,13 @@ public class Button extends JPanel {
         button.setBorderPainted(false);
         button.setFocusPainted(false);
 
-        return button;
-    }
+        if (this.listener != null)
+            button.addActionListener(this.listener);
 
-    private void addHoverEffect(Color color) {
-        this.button.addMouseListener(new MouseAdapter() {
+        button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(color);
+                button.setBackground(hoverColor);
             }
 
             @Override
@@ -77,54 +71,78 @@ public class Button extends JPanel {
                 button.setBackground(background);
             }
         });
+
+        return button;
     }
 
     public static final class ButtonBuilder {
 
-        private static int n = 0;
+        private String text;
+        private Font font;
 
-        private Button button;
+        private Color foreground;
+        private Color background;
+        private Color hoverColor;
+
+        private Dimension dimension;
+        private ActionListener listener;
 
         public ButtonBuilder() {
-            this.button = new Button(String.valueOf(n), DEFAULT_FONT, DEFAULT_FOREGROUND, DEFAULT_BACKGROUND, DEFAULT_DIMENSION);
-            this.button.text = String.valueOf(n++);
+            this.text = "";
+            this.font = new JButton().getFont();
+
+            this.foreground = Color.GREEN;
+            this.background = Color.BLACK;
+            this.hoverColor = Color.BLACK;
+
+            this.dimension = new Dimension(250, 50);
+            this.listener = null;
         }
 
         public ButtonBuilder withText(String text) {
-            this.button.text = text;
+            this.text = text;
             return this;
         }
 
         public ButtonBuilder withFont(Font font) {
-            this.button.font = font;
+            this.font = font;
             return this;
         }
 
         public ButtonBuilder withForeground(Color foreground) {
-            this.button.foreground = foreground;
+            this.foreground = foreground;
             return this;
         }
 
         public ButtonBuilder withBackground(Color background) {
-            this.button.background = background;
+            this.background = background;
             return this;
         }
 
         public ButtonBuilder withHoverColor(Color color) {
-            this.button.addHoverEffect(color);
+            this.hoverColor = color;
             return this;
         }
 
         public ButtonBuilder withDimension(Dimension dimension) {
-            this.button.dimension = dimension;
+            this.dimension = dimension;
             return this;
         }
 
         public ButtonBuilder withActionListener(ActionListener listener) {
-            this.button.button.addActionListener(listener);
+            this.listener = listener;
             return this;
         }
 
-        public JPanel build() { return this.button; }
+        public JPanel build() {
+            return new Button(
+                    this.text,
+                    this.font,
+                    this.foreground,
+                    this.background,
+                    this.hoverColor,
+                    this.dimension,
+                    this.listener);
+        }
     }
 }

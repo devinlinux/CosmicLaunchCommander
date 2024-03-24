@@ -37,10 +37,11 @@ public class Frame extends JFrame implements ComponentListener {
         setup();
         display();
 
-        Logger.info("Created new Frame: %s".formatted(super.getName()), "Frame::new");
+        Logger.info("Created new Frame: %s".formatted(super.getTitle()), "Frame::new");
     }
 
     private void setup() {
+        super.setTitle(LONG_TITLE);
         super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         super.setSize(INIT_WIDTH, INIT_HEIGHT);
         super.setIconImage(ICON.getImage());
@@ -53,13 +54,11 @@ public class Frame extends JFrame implements ComponentListener {
         switch (this.stage) {
             case SPLASH_SCREEN -> System.out.println("add(new SplashScreen())");
             case LOGIN -> System.out.println("add(new LoginSceren())");
-            case MAIN -> {
-                this.add(new MainScreen(this));
-                this.setVisible(true);
-            }
+            case MAIN -> this.add(new MainScreen(this));
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
         }
+        setVisible(true);
     }
 
     public void stage(final Stage stage) {
