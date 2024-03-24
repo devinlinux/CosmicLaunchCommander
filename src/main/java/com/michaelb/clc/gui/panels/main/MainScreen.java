@@ -21,6 +21,8 @@ import java.util.Random;
 
 import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.components.Button.ButtonBuilder;
+import com.michaelb.clc.gui.components.AdvancedButton.AdvancedButtonBuilder;
+import com.michaelb.clc.gui.components.AdvancedButton.PanelAnimation;
 
 public class MainScreen extends JPanel implements ComponentListener {
 
@@ -106,6 +108,14 @@ public class MainScreen extends JPanel implements ComponentListener {
         buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
                 .withHoverColor(Color.DARK_GRAY)
+                .build(), gbc);
+
+        buttons.add(new AdvancedButtonBuilder()
+                .withText("Advanced Button Test")
+                .withDefaultAnimation((g, width, height) -> {
+                    g.setColor(Color.ORANGE);
+                    g.fillRect(0, 0, width, height);
+                })
                 .build(), gbc);
 
         buttons.add(new ButtonBuilder()

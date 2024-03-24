@@ -177,5 +177,10 @@ public final class AdvancedButton extends JPanel implements MouseListener {
             this.listener = listener;
             return this;
         }
+
+        public JPanel build() {
+            return new AdvancedButton(this.text, this.font, this.foreground, this.defaultAnimation,
+                    this.hoverAnimation, this.dimension, this.listener);
+        }
     }
 }
