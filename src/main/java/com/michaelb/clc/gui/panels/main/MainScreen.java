@@ -50,18 +50,23 @@ public class MainScreen extends JPanel implements ComponentListener {
 
     private void initStars() {
         for (int i = 0; i < NUM_STARS; i++) {
-            int x = rand.nextInt(context.getWidth() - STAR_SIZE * 2) + STAR_SIZE;
-            int y = rand.nextInt(context.getHeight() - STAR_SIZE * 2) + STAR_SIZE;
-
-            this.stars.add(new Star(x, y, STAR_SIZE, FADE_DURATION));
+            this.stars.add(new Star(this.randX(), this.randY(),  STAR_SIZE, FADE_DURATION));
         }
     }
 
     private void reinitStars() {
         for (Star star : this.stars) {
-            star.x = rand.nextInt(context.getWidth() - STAR_SIZE * 2) + STAR_SIZE;
-            star.y = rand.nextInt(context.getHeight() - STAR_SIZE * 2) + STAR_SIZE;
+            star.x = this.randX();
+            star.y = this.randY();
         }
+    }
+
+    private int randX() {
+        return rand.nextInt(this.context.getWidth() - STAR_SIZE * 2) + STAR_SIZE;
+    }
+
+    private int randY() {
+        return rand.nextInt(this.context.getHeight() - STAR_SIZE * 2) + STAR_SIZE;
     }
 
     private void startAnimation() {
@@ -100,6 +105,11 @@ public class MainScreen extends JPanel implements ComponentListener {
 
         buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
+                .withHoverColor(Color.DARK_GRAY)
+                .build(), gbc);
+
+        buttons.add(new ButtonBuilder()
+                .withText("Manage Complex")
                 .withHoverColor(Color.DARK_GRAY)
                 .build(), gbc);
 
