@@ -31,8 +31,9 @@ public class MainScreen extends JPanel implements ComponentListener {
     private static final int FADE_DURATION = 50;
 
     private final Frame context;
-    private final List<Star> stars;
     private final Random rand;
+
+    private final List<Star> stars;
 
     public MainScreen(final Frame context) {
         this.context = context;
@@ -123,7 +124,7 @@ public class MainScreen extends JPanel implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        initStars();
+        reinitStars();
     }
 
     @Override
