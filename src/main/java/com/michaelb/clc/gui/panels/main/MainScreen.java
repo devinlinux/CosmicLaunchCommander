@@ -13,7 +13,7 @@ import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.ComponentAdapter;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.components.Button.ButtonBuilder;
 import com.michaelb.clc.gui.components.AdvancedButton.AdvancedButtonBuilder;
 
-public class MainScreen extends JPanel implements ComponentListener {
+public class MainScreen extends JPanel {
 
     private static final Color BACKGROUND_COLOR = Color.BLACK;
 
@@ -89,7 +89,12 @@ public class MainScreen extends JPanel implements ComponentListener {
     private void configurePanel() {
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.setLayout(new GridBagLayout());
-        this.addComponentListener(this);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                reinitStars();
+            }
+        });
     }
 
     private void addButtons() {
@@ -139,20 +144,4 @@ public class MainScreen extends JPanel implements ComponentListener {
         for (Star star : this.stars)
             star.draw(g);
     }
-
-    /* component listener */
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-        reinitStars();
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent e) {}
-
-    @Override
-    public void componentMoved(ComponentEvent e) {}
-
-    @Override
-    public void componentShown(ComponentEvent e) {}
 }

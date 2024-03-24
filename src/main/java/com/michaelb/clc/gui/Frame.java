@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.ComponentAdapter;
 
 import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
@@ -15,7 +15,7 @@ import com.michaelb.clc.gui.panels.main.MainScreen;
 
 import static com.michaelb.clc.util.IOUtils.SEP;
 
-public class Frame extends JFrame implements ComponentListener {
+public class Frame extends JFrame {
 
     private static final String LONG_TITLE = "Cosmic Launch Commander %s".formatted(ProgramInfo.VERSION);
     private static final String SHORT_TITLE = "CLC %s".formatted(ProgramInfo.VERSION);
@@ -47,8 +47,13 @@ public class Frame extends JFrame implements ComponentListener {
         this.setSize(INIT_WIDTH, INIT_HEIGHT);
         this.setIconImage(ICON.getImage());
         this.setLocationRelativeTo(null);
-        this.addComponentListener(this);
         this.setLayout(new BorderLayout());
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                setTitle(getWidth() <= 300 ? SHORT_TITLE : LONG_TITLE);
+            }
+        });
         this.setVisible(true);
     }
 
@@ -66,20 +71,4 @@ public class Frame extends JFrame implements ComponentListener {
     public void stage(final Stage stage) {
         this.stage = stage;
     }
-
-    /* component listener */
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-        this.setTitle(super.getWidth() <= 300 ? SHORT_TITLE : LONG_TITLE);
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {}
-
-    @Override
-    public void componentShown(ComponentEvent e) {}
-
-    @Override
-    public void componentHidden(ComponentEvent e) {}
 }
