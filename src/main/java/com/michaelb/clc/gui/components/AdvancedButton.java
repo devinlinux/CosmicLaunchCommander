@@ -50,6 +50,8 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         this.listener = listener;
 
         this.hovered = false;
+
+        createButton();
     }
 
     private void createButton() {
@@ -60,6 +62,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         this.setMaximumSize(this.dimension);
 
         JLabel buttonText = new JLabel(this.text);
+        buttonText.setFont(this.font);
         buttonText.setForeground(this.foreground);
         buttonText.setOpaque(false);
 
@@ -67,6 +70,8 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         this.setVisible(true);
 
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        this.addMouseListener(this);
     }
 
     @Override
@@ -77,37 +82,100 @@ public final class AdvancedButton extends JPanel implements MouseListener {
             this.defaultAnimation.draw(g, this.getWidth(), this.getHeight());
     }
 
+    @FunctionalInterface
     public static interface PanelAnimation {
-        void draw(Graphics g, int width, int height);
+        void draw(final Graphics g, final int width, final int height);
     }
 
     /* mouse listener */
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        listener.actionPerformed(null);
+        if (this.listener != null)
+            listener.actionPerformed(null);
         //  might need interface here
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         hovered = true;
-        //  maybe repaint
+        repaint();
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         hovered = false;
-        //  maybe repaint
+        repaint();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // set background white or something
+        setBackground(Color.WHITE);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        //  undo backgroud set
+        repaint();
+    }
+
+    public static final class AdvancedButtonBuilder {
+
+        private String text;
+        private Font font;
+
+        private Color foreground;
+        private PanelAnimation defaultAnimation;
+        private PanelAnimation hoverAnimation;
+
+        private Dimension dimension;
+        private ActionListener listener;
+
+        public AdvancedButtonBuilder() {
+            this.text = "";
+            this.font = new JLabel().getFont();
+
+            this.foreground = Color.GREEN;
+            this.defaultAnimation = (g, width, height) -> {
+                g.setColor(Color.BLACK);
+                g.fillRect(0, 0, width, height);
+            };
+            this.hoverAnimation = (g, width, height) -> {
+                g.setColor(Color.LIGHT_GRAY);
+                g.fillRect(0, 0, width, height);
+            };
+
+            this.dimension = new Dimension(250, 50);
+            this.listener = null;
+        }
+
+        public AdvancedButtonBuilder withText(final String text) {
+            this.text = text;
+            return this;
+        }
+
+        public AdvancedButtonBuilder withFont(final Font font) {
+            this.font = font;
+            return this;
+        }
+
+        public AdvancedButtonBuilder withDefaultAnimation(final PanelAnimation defaultAnimation) {
+            this.defaultAnimation = defaultAnimation;
+            return this;
+        }
+
+        public AdvancedButtonBuilder withHoverAnimatino(final PanelAnimation hoverAnimation) {
+            this.hoverAnimation = hoverAnimation;
+            return this;
+        }
+
+        public AdvancedButtonBuilder withDimension(final Dimension dimension) {
+            this.dimension = dimension;
+            return this;
+        }
+
+        public AdvancedButtonBuilder withActionListener(final ActionListener listener) {
+            this.listener = listener;
+            return this;
+        }
     }
 }
