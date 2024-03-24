@@ -6,4 +6,5 @@ public enum Stage {
     MAIN,
     CONSTRUCTION,
     LAUNCH,
+    COMPLEX,
 }

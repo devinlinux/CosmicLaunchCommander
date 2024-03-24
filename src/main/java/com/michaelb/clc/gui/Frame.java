@@ -11,7 +11,8 @@ import java.awt.event.ComponentAdapter;
 import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
 
-import com.michaelb.clc.gui.panels.main.MainScreen;
+import com.michaelb.clc.gui.ui.main.MainScreen;
+import com.michaelb.clc.gui.ui.complex.ComplexScreen;
 
 import static com.michaelb.clc.util.IOUtils.SEP;
 
@@ -64,6 +65,7 @@ public class Frame extends JFrame {
             case MAIN -> this.add(new MainScreen(this), BorderLayout.CENTER);
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
+            case COMPLEX -> this.add(new ComplexScreen(this), BorderLayout.CENTER);
         }
         setVisible(true);
     }

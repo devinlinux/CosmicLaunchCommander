@@ -1,4 +1,4 @@
-package com.michaelb.clc.gui.panels.main;
+package com.michaelb.clc.gui.ui.main;
 
 //  imports
 import javax.swing.JPanel;
