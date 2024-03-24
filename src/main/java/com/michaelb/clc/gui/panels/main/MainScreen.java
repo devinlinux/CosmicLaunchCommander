@@ -7,11 +7,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentAdapter;
 
@@ -34,7 +33,7 @@ public class MainScreen extends JPanel {
     private final Frame context;
     private final Random rand;
 
-    private final List<Star> stars;
+    private final List<Star2D> stars;
 
     public MainScreen(final Frame context) {
         this.context = context;
@@ -51,12 +50,12 @@ public class MainScreen extends JPanel {
 
     private void initStars() {
         for (int i = 0; i < NUM_STARS; i++) {
-            this.stars.add(new Star(this.randX(), this.randY(),  STAR_SIZE, FADE_DURATION));
+            this.stars.add(new Star2D(this.randX(), this.randY(),  STAR_SIZE, FADE_DURATION));
         }
     }
 
     private void reinitStars() {
-        for (Star star : this.stars) {
+        for (Star2D star : this.stars) {
             star.x = this.randX();
             star.y = this.randY();
         }
@@ -73,14 +72,14 @@ public class MainScreen extends JPanel {
     private void startAnimation() {
         new Thread(() -> {
             while (true) {
-                for (Star star : stars)
+                for (Star2D star : stars)
                     star.update();
                 repaint();
 
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
-                    System.err.printf("Error sleeping for star animaiton thread: %s%n", e.getMessage());
+                    System.err.printf("Error sleeping for star animation thread: %s%n", e.getMessage());
                 }
             }
         }).start();
@@ -117,9 +116,24 @@ public class MainScreen extends JPanel {
 
         buttons.add(new AdvancedButtonBuilder()
                 .withText("Advanced Button Test")
-                .withDefaultAnimation((g, x, y, width, height) -> {
-                    g.setColor(Color.ORANGE);
+                .withHoverAnimation((g, x, y, width, height) -> {
+                    g.setColor(Color.BLACK);
                     g.fillRect(x, y, width, height);
+
+                    int numStars = 200;
+                    List<Star3D> starfield = new ArrayList<>(numStars);
+
+                    for (int i = 0; i < numStars; i++) {
+                        starfield.add(new Star3D(rand.nextDouble() * width - width / 2,
+                                             rand.nextDouble() * height - height / 2,
+                                             rand.nextDouble() * width,
+                                             1));
+                    }
+
+                    for (Star3D star : starfield) {
+                        star.update(width, height);
+                        star.draw(g, x, y, width, height);
+                    }
                 })
                 .build(), gbc);
 
@@ -141,7 +155,7 @@ public class MainScreen extends JPanel {
         g2D.setColor(BACKGROUND_COLOR);
         g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        for (Star star : this.stars)
+        for (Star2D star : this.stars)
             star.draw(g);
     }
 }

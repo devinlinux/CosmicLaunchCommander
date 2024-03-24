@@ -26,7 +26,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
     private PanelAnimation hoverAnimation;
     private final PanelAnimation hoverAnimationTemp;
 
-    private Dimension dimension;
+    private final Dimension dimension;
 
     private final ActionListener listener;
 
@@ -82,7 +82,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
     }
 
     @FunctionalInterface
-    public static interface PanelAnimation {
+    public interface PanelAnimation {
         void draw(final Graphics g, final int x, final int y, final int width, final int height);
     }
 

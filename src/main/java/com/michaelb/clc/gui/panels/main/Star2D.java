@@ -6,7 +6,7 @@ import java.util.Random;
 import java.awt.Graphics;
 import java.awt.Color;
 
-public final class Star {
+public final class Star2D {
 
     public int x;
     public int y;
@@ -21,7 +21,7 @@ public final class Star {
 
     private final Random rand;
 
-    public Star(final int x, final int y, final int size, final int fadeDuration) {
+    public Star2D(final int x, final int y, final int size, final int fadeDuration) {
         this.x = x;
         this.y = y;
 
