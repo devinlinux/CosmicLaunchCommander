@@ -8,12 +8,9 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
-import java.awt.Component;
 
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.awt.event.MouseEvent;
@@ -26,7 +23,8 @@ public final class AdvancedButton extends JPanel implements MouseListener {
 
     private final Color foreground;
     private final PanelAnimation defaultAnimation;
-    private final PanelAnimation hoverAnimation;
+    private PanelAnimation hoverAnimation;
+    private final PanelAnimation hoverAnimationTemp;
 
     private Dimension dimension;
 
@@ -43,6 +41,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         this.foreground = foreground;
         this.defaultAnimation = defaultAnimation;
         this.hoverAnimation = hoverAnimation;
+        this.hoverAnimationTemp = hoverAnimation;
 
         this.dimension = dimension;
 
@@ -107,11 +106,15 @@ public final class AdvancedButton extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        setBackground(Color.WHITE);
+        this.hoverAnimation = (g, width, height) -> {
+            g.setColor(Color.LIGHT_GRAY);
+            g.fillRect(0, 0, width, height);
+        };
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        this.hoverAnimation = hoverAnimationTemp;
         repaint();
     }
 
