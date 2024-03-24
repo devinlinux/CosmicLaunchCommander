@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
-
 import java.awt.GridBagLayout;
 
 import java.awt.event.ActionListener;
@@ -22,6 +21,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
     private final Font font;
 
     private final Color foreground;
+    private final Color background;
     private final PanelAnimation defaultAnimation;
     private PanelAnimation hoverAnimation;
     private final PanelAnimation hoverAnimationTemp;
@@ -33,12 +33,13 @@ public final class AdvancedButton extends JPanel implements MouseListener {
     private boolean hovered;
 
     public AdvancedButton(final String text, final Font font, final Color foreground,
-            final PanelAnimation defaultAnimation, final PanelAnimation hoverAnimation,
+            final Color background, final PanelAnimation defaultAnimation, final PanelAnimation hoverAnimation,
             final Dimension dimension, final ActionListener listener) {
         this.text = text;
         this.font = font;
 
         this.foreground = foreground;
+        this.background = background;
         this.defaultAnimation = defaultAnimation;
         this.hoverAnimation = hoverAnimation;
         this.hoverAnimationTemp = hoverAnimation;
@@ -72,15 +73,17 @@ public final class AdvancedButton extends JPanel implements MouseListener {
 
     @Override
     public void paintComponent(Graphics g) {
+        g.setColor(this.background);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         if (this.hovered)
-            this.hoverAnimation.draw(g, this.getWidth(), this.getHeight());
+            this.hoverAnimation.draw(g, 5, 0, this.getWidth(), this.getHeight());
         else
-            this.defaultAnimation.draw(g, this.getWidth(), this.getHeight());
+            this.defaultAnimation.draw(g, 5, 0, this.getWidth(), this.getHeight());
     }
 
     @FunctionalInterface
     public static interface PanelAnimation {
-        void draw(final Graphics g, final int width, final int height);
+        void draw(final Graphics g, final int x, final int y, final int width, final int height);
     }
 
     /* mouse listener */
@@ -106,9 +109,9 @@ public final class AdvancedButton extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        this.hoverAnimation = (g, width, height) -> {
+        this.hoverAnimation = (g, x, y, width, height) -> {
             g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(0, 0, width, height);
+            g.fillRect(x, y, width, height);
         };
     }
 
@@ -124,6 +127,7 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         private Font font;
 
         private Color foreground;
+        private Color background;
         private PanelAnimation defaultAnimation;
         private PanelAnimation hoverAnimation;
 
@@ -135,13 +139,14 @@ public final class AdvancedButton extends JPanel implements MouseListener {
             this.font = new JLabel().getFont();
 
             this.foreground = Color.GREEN;
-            this.defaultAnimation = (g, width, height) -> {
+            this.background = Color.BLACK;
+            this.defaultAnimation = (g, x, y, width, height) -> {
                 g.setColor(Color.BLACK);
-                g.fillRect(0, 0, width, height);
+                g.fillRect(x, y, width, height);
             };
-            this.hoverAnimation = (g, width, height) -> {
+            this.hoverAnimation = (g, x, y, width, height) -> {
                 g.setColor(Color.DARK_GRAY);
-                g.fillRect(0, 0, width, height);
+                g.fillRect(x, y, width, height);
             };
 
             this.dimension = new Dimension(250, 50);
@@ -158,12 +163,22 @@ public final class AdvancedButton extends JPanel implements MouseListener {
             return this;
         }
 
+        public AdvancedButtonBuilder withForeground(final Color foreground) {
+            this.foreground = foreground;
+            return this;
+        }
+
+        public AdvancedButtonBuilder withBackground(final Color background) {
+            this.background = background;
+            return this;
+        }
+
         public AdvancedButtonBuilder withDefaultAnimation(final PanelAnimation defaultAnimation) {
             this.defaultAnimation = defaultAnimation;
             return this;
         }
 
-        public AdvancedButtonBuilder withHoverAnimatino(final PanelAnimation hoverAnimation) {
+        public AdvancedButtonBuilder withHoverAnimation(final PanelAnimation hoverAnimation) {
             this.hoverAnimation = hoverAnimation;
             return this;
         }
@@ -179,8 +194,8 @@ public final class AdvancedButton extends JPanel implements MouseListener {
         }
 
         public JPanel build() {
-            return new AdvancedButton(this.text, this.font, this.foreground, this.defaultAnimation,
-                    this.hoverAnimation, this.dimension, this.listener);
+            return new AdvancedButton(this.text, this.font, this.foreground, this.background,
+                    this.defaultAnimation, this.hoverAnimation, this.dimension, this.listener);
         }
     }
 }

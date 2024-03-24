@@ -117,9 +117,9 @@ public class MainScreen extends JPanel {
 
         buttons.add(new AdvancedButtonBuilder()
                 .withText("Advanced Button Test")
-                .withDefaultAnimation((g, width, height) -> {
+                .withDefaultAnimation((g, x, y, width, height) -> {
                     g.setColor(Color.ORANGE);
-                    g.fillRect(0, 0, width, height);
+                    g.fillRect(x, y, width, height);
                 })
                 .build(), gbc);
 
