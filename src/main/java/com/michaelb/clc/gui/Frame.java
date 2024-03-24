@@ -67,6 +67,7 @@ public class Frame extends JFrame {
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
             case COMPLEX -> this.add(new ComplexScreen(this), BorderLayout.CENTER);
+            case MISSION_CONTROL -> System.out.println("add new MissionControlScreen())");
         }
         setVisible(true);
     }

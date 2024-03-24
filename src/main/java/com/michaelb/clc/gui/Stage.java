@@ -7,4 +7,5 @@ public enum Stage {
     CONSTRUCTION,
     LAUNCH,
     COMPLEX,
+    MISSION_CONTROL,
 }
