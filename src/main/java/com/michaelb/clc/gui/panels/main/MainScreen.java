@@ -28,15 +28,17 @@ public class MainScreen extends JPanel implements ComponentListener {
 
     private static final int NUM_STARS = 256;
     private static final int STAR_SIZE = 2;
-    private static final int FADE_DURATION = 10;
+    private static final int FADE_DURATION = 50;
 
     private final Frame context;
-
     private final List<Star> stars;
+    private final Random rand;
 
     public MainScreen(final Frame context) {
         this.context = context;
         this.stars = new ArrayList<>(NUM_STARS);
+        this.rand = new Random();
+
         initStars();
 
         this.configurePanel();
@@ -46,14 +48,18 @@ public class MainScreen extends JPanel implements ComponentListener {
     }
 
     private void initStars() {
-        Random rand = new Random();
-        this.stars.clear();
-
         for (int i = 0; i < NUM_STARS; i++) {
             int x = rand.nextInt(context.getWidth() - STAR_SIZE * 2) + STAR_SIZE;
             int y = rand.nextInt(context.getHeight() - STAR_SIZE * 2) + STAR_SIZE;
 
             this.stars.add(new Star(x, y, STAR_SIZE, FADE_DURATION));
+        }
+    }
+
+    private void reinitStars() {
+        for (Star star : this.stars) {
+            star.x = rand.nextInt(context.getWidth() - STAR_SIZE * 2) + STAR_SIZE;
+            star.y = rand.nextInt(context.getHeight() - STAR_SIZE * 2) + STAR_SIZE;
         }
     }
 
