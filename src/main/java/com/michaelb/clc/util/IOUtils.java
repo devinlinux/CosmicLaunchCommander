@@ -5,17 +5,17 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Font;
 import java.awt.FontFormatException;
 
-import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.Channels;
 
 import java.io.IOException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -24,8 +24,6 @@ import java.net.URI;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public final class IOUtils {
@@ -35,7 +33,6 @@ public final class IOUtils {
     /* symbolic constants */
 
     private static final int NUM_THREADS = 20;
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
 
     public static final char SEP = java.io.File.separatorChar;
 
@@ -68,6 +65,9 @@ public final class IOUtils {
     private static final GameFile IMAGE_ICON = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
     private static final GameFile NASALIZATION_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "nasalization-rg.otf"), "Nasalization Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/nasalization-rg.otf");
 
+    /* file paths */
+    public static final String IMAGE_ICON_PATH = IMAGE_ICON.path.toString();
+
     /* utility methods */
 
     private static void downloadFile(GameFile file) {
@@ -76,62 +76,14 @@ public final class IOUtils {
             return;
         }
 
-        executorService.submit(() -> {
-            try {
-                URL url = new URI(file.downloadLink).toURL();
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    long fileSize = connection.getContentLengthLong();
-                    ByteBuffer buffer = ByteBuffer.allocateDirect((int) Math.min(fileSize, Integer.MAX_VALUE));
-
-                    AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(
-                            file.path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-
-                    Future<Integer> bytesRead = fileChannel.read(buffer, 0);
-                    while (!bytesRead.isDone()) {
-                        // Wait for the read operation to complete
-                    }
-
-                    int totalBytesRead = bytesRead.get();
-                    int bytesRemaining = (int) (fileSize - totalBytesRead);
-
-                    while (bytesRemaining > 0) {
-                        buffer.clear();
-                        bytesRead = fileChannel.read(buffer, totalBytesRead);
-                        while (!bytesRead.isDone()) {
-                            // Wait for the read operation to complete
-                        }
-
-                        int bytesReadThisTime = bytesRead.get();
-                        totalBytesRead += bytesReadThisTime;
-                        bytesRemaining -= bytesReadThisTime;
-                    }
-
-                    fileChannel.close();
-                    Logger.info("Successfully downloaded %s".formatted(file.name), "IOUtils::downloadFile");
-                } else {
-                    Logger.err("Failed to download %s, response code: %d".formatted(file.name, responseCode), "IOUtils::downloadFile");
-                }
-            } catch (IOException | URISyntaxException | InterruptedException | ExecutionException e) {
-                Logger.err("Failed to download %s: %s".formatted(file.name, e.getMessage()), "IOUtils::downloadFile");
-            }
-        });
-    }
-
-    private static void shutdownExecutorService() {
-        executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(SHUTDOWN_RETRY_INTERVAL, TimeUnit.MILLISECONDS)) {
-                executorService.shutdownNow();
-                if (!executorService.awaitTermination(SHUTDOWN_RETRY_INTERVAL, TimeUnit.MILLISECONDS))
-                    Logger.err("Executor service did not terminate", "IOUtils::shutdownExecutorService");
-            }
-        } catch (InterruptedException e) {
-            executorService.shutdownNow();
-            Thread.currentThread().interrupt();
+            URL url = new URI(file.downloadLink).toURL();
+            ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+            FileOutputStream fos = new FileOutputStream(file.path.toString());
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            Logger.info("Successfully downloaded %s".formatted(file.name), "IOUtils::downloadFile");
+        } catch (URISyntaxException | IOException e) {
+            Logger.err("Failed to download %s: %s".formatted(file.name, e.getMessage()), "IOUtils::downloadFile");
         }
     }
 
@@ -265,8 +217,6 @@ public final class IOUtils {
         checkForNasalizationRegularFontAndDownloadIfNotFound();
 
         readFonts();
-
-        shutdownExecutorService();
     }
 
     /* getters */
