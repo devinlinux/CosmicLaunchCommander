@@ -1,6 +1,9 @@
 package com.michaelb.clc.util;
 
 public final class Environment {
+
+    private Environment() {}
+
     private static final String DEFAULT_PLAYER_NAME = "Test";
     private static final String DEFAULT_COMPANY_NAME = "Test Launch Company";
 

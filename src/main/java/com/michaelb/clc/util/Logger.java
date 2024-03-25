@@ -55,6 +55,8 @@ public final class Logger {
         }
     }
 
+    private Logger() {}
+
     public static void init() {
         if (!INSTANCE)
             INSTANCE = true;

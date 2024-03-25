@@ -7,6 +7,7 @@ import java.awt.FontFormatException;
 
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.CompletionHandler;
@@ -30,6 +31,8 @@ public final class IOUtils {
 
     private IOUtils() {}
 
+    /* symbolic constants */
+
     private static final int NUM_THREADS = 20;
     private static final ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
 
@@ -40,7 +43,27 @@ public final class IOUtils {
 
     private static final long SHUTDOWN_RETRY_INTERVAL = 800;
 
-    private static final String NOIZE_SPORT_FONT_PATH = "src%smain%sresources%sNoizeSportRegular.ttf".formatted(SEP, SEP, SEP);
+    private static final String GAME_DIRECTORY = System.getProperty("user.home") + SEP + ".clc";
+
+    /* utility records */
+    private record GameDirectory(Path path, String name) {}
+    private record GameFile(Path path, String name, String downloadLink) {}
+
+
+    /* directories */
+
+    private static final GameDirectory GAME_RESOURCES_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources"), "game resources");
+    private static final GameDirectory GAME_FONTS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "fonts"), "game fonts");
+    private static final GameDirectory GAME_IMAGES_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "images"), "game images");
+    private static final GameDirectory GAME_SOUNDS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "sounds"), "game sounds");
+    private static final GameDirectory GAME_MUSIC_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "music"), "game music");
+
+    /* files */
+
+    private static final GameFile IMAGE_ICON = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
+    private static final GameFile NOIZE_SPORT_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "fonts/NoizeSportRegular.ttf"), "Noize Sport Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/NoizeSportRegular.ttf");
+
+    /* utility methods */
 
     private static void downloadFile(final String downloadLink, final String destinationPath, final String filename) {
         if (!isInternetAvailable()) {
@@ -52,42 +75,44 @@ public final class IOUtils {
             URL url = new URI(downloadLink).toURL();
             Path destination = Path.of(destinationPath);
 
-            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(destination, StandardOpenOption.CREATE,
-                    StandardOpenOption.WRITE);
-            ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
+            Callable<Boolean> downloadTask;
+            try (AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(destination, StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE)) {
+                ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
 
-            CompletionHandler<Integer, Void> completionHandler = new CompletionHandler<Integer,Void>() {
-                @Override
-                public void completed(Integer result, Void attachment) {
-                    if (result == -1) {
-                        try {
-                            fileChannel.close();
-                            Logger.info("Successfully downloaded %s".formatted(filename), "IOUtils::downloadFile");
-                        } catch (IOException e) {
-                            Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
+                CompletionHandler<Integer, Void> completionHandler = new CompletionHandler<Integer, Void>() {
+                    @Override
+                    public void completed(Integer result, Void attachment) {
+                        if (result == -1) {
+                            try {
+                                fileChannel.close();
+                                Logger.info("Successfully downloaded %s".formatted(filename), "IOUtils::downloadFile");
+                            } catch (IOException e) {
+                                Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
+                            }
+                        } else {
+                            buffer.flip();
+                            fileChannel.write(buffer, 0, null, this);
+                            buffer.clear();
                         }
-                    } else {
-                        buffer.flip();
-                        fileChannel.write(buffer, 0, null, this);
-                        buffer.clear();
                     }
-                }
 
-                @Override
-                public void failed(Throwable exc, Void attachment) {
-                    Logger.err("Error while downloading %s: %s".formatted(filename, exc.getMessage()), "IOUtils::downloadFile");
-                }
-            };
+                    @Override
+                    public void failed(Throwable exc, Void attachment) {
+                        Logger.err("Error while downloading %s: %s".formatted(filename, exc.getMessage()), "IOUtils::downloadFile");
+                    }
+                };
 
-            Callable<Boolean> downloadTask = () -> {
-                try {
-                    fileChannel.write(buffer, 0, null, completionHandler);
-                    return true;
-                } catch (Exception e) {
-                    Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
-                    return false;
-                }
-            };
+                downloadTask = () -> {
+                    try {
+                        fileChannel.write(buffer, 0, null, completionHandler);
+                        return true;
+                    } catch (Exception e) {
+                        Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
+                        return false;
+                    }
+                };
+            }
 
             Future<Boolean> future = executorService.submit(downloadTask);
             future.get();
@@ -97,8 +122,6 @@ public final class IOUtils {
             Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
         }
     }
-
-    
 
     private static void shutdownExecutorService() {
         executorService.shutdown();
@@ -135,13 +158,90 @@ public final class IOUtils {
         return false;
     }
 
+    private static void createDirectoryIfNotFound(final GameDirectory gameDirectory) {
+        if (Files.exists(gameDirectory.path))
+            Logger.info("Directory %s already exists".formatted(gameDirectory.name), "IOUtils::createDirectoryIfNotFound");
+        else {
+            try {
+                Files.createDirectories(gameDirectory.path);
+                Logger.info("Successfully created directory %s".formatted(gameDirectory.name), "IOUtils::createDirectoryIfNotFound");
+            } catch (IOException e) {
+                Logger.err("Could not create directory %s: %s".formatted(gameDirectory.name, e.getMessage()), "IOUtils::createDirectoryIfNotFound");
+            }
+        }
+    }
+
+    private static void gameResourcesDirectory() {
+        String homeDirectory = System.getProperty("user.home");
+
+        File programDirectory = new File(homeDirectory + SEP + ".clc");
+        if (!programDirectory.exists()) {
+            if (programDirectory.mkdir())
+                Logger.info("Created program directory", "IOUtils::gameResourcesDirectory");
+            else
+                Logger.err("Failed to create program directory", "IOUtils::gameResourcesDirectory");
+        } else {
+            Logger.info("Program directory already exists", "IOUtils::gameResourcesDirectory");
+        }
+    }
+
+    /* directories */
+
+    private static void checkForGameResourcesDirectoryAndCreateIfNotFound() {
+        createDirectoryIfNotFound(GAME_RESOURCES_DIRECTORY);
+    }
+
+    private static void checkForGameFontsDirectoryAndCreateIfNotFound() {
+        createDirectoryIfNotFound(GAME_FONTS_DIRECTORY);
+    }
+
+    private static void checkForGameImagesDirectoryAndCreateIfNotFound() {
+        createDirectoryIfNotFound(GAME_IMAGES_DIRECTORY);
+    }
+
+    private static void checkForGameSoundsDirectoryAndCreateIfNotFound() {
+        createDirectoryIfNotFound(GAME_SOUNDS_DIRECTORY);
+    }
+
+    private static void checkForGameMusicDirectoryAndCreateIfNotFound() {
+        createDirectoryIfNotFound(GAME_MUSIC_DIRECTORY);
+    }
+
+    /* files */
+
+    private static void checkForImageIconAndDownloadIfNotFound() {
+        if (Files.exists(IMAGE_ICON.path))
+            Logger.info("Image icon already exists", "IOUtils::checkForImageIconAndDownloadIfNotFound");
+        else
+            downloadFile(IMAGE_ICON.downloadLink, IMAGE_ICON.path.toString(), IMAGE_ICON.name);
+    }
+
+    private static void checkForNoizeSportRegularFontAndDownloadIfNotFound() {
+        if (Files.exists(NOIZE_SPORT_REGULAR.path))
+            Logger.info("Noize Sport Regular font already exists", "IOUtils::checkForNoizeSportRegularFontAndDownloadIfNotFound");
+        else
+            downloadFile(NOIZE_SPORT_REGULAR.downloadLink, NOIZE_SPORT_REGULAR.path.toString(), NOIZE_SPORT_REGULAR.name);
+    }
+
+    /* fonts */
+
     public static void readNoizeSportRegularFont() {
         try {
             GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            env.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(NOIZE_SPORT_FONT_PATH)));
+            env.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(NOIZE_SPORT_REGULAR.path.toString())));
         } catch (IOException | FontFormatException e) {
             Logger.err("Failed to read Noize Sport Regular", "IOUtils::readNoizeSportRegularFont");
         }
+    }
+
+    /* driver methods */
+
+    public static void checkForGameDirectories() {
+        checkForGameResourcesDirectoryAndCreateIfNotFound();
+        checkForGameFontsDirectoryAndCreateIfNotFound();
+        checkForGameImagesDirectoryAndCreateIfNotFound();
+        checkForGameSoundsDirectoryAndCreateIfNotFound();
+        checkForGameMusicDirectoryAndCreateIfNotFound();
     }
 
     public static void readFonts() {
@@ -149,6 +249,12 @@ public final class IOUtils {
     }
 
     public static void checkForGameFiles() {
+        checkForGameDirectories();
+        readFonts();
 
+        checkForImageIconAndDownloadIfNotFound();
+        checkForNoizeSportRegularFontAndDownloadIfNotFound();
+
+        shutdownExecutorService();
     }
 }
