@@ -4,6 +4,7 @@ package com.michaelb.clc.gui.ui.splash;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
+import javax.swing.SwingUtilities;
 
 import java.awt.GridBagLayout;
 
@@ -41,6 +42,7 @@ public class SplashScreen extends JPanel {
     private class MonitorWorker extends SwingWorker<Void, Integer> {
         @Override
         protected Void doInBackground() throws Exception {
+            SwingUtilities.invokeLater(() -> initComponents());
             int prevCompletedJobs = 0;
             while (IOUtils.completedJobs() < IOUtils.jobs()) {
                 int currentCompletedJobs = IOUtils.completedJobs();
@@ -48,7 +50,7 @@ public class SplashScreen extends JPanel {
                     publish(currentCompletedJobs);
                     prevCompletedJobs = currentCompletedJobs;
                 }
-                Thread.sleep(0);
+                Thread.sleep(1);
             }
             publish(IOUtils.jobs());
             return null;
@@ -57,11 +59,13 @@ public class SplashScreen extends JPanel {
         @Override
         protected void process(List<Integer> chunks) {
             int progress = chunks.getLast();
-            progressBar.setValue(progress);
-            if (progress == IOUtils.jobs()) {
-                System.out.println("done... all jobs completed");
-                context.stage(Stage.MAIN);
-            }
+            SwingUtilities.invokeLater(() -> {
+                progressBar.setValue(progress);
+                if (progress == IOUtils.jobs()) {
+                    System.out.println("done... all jobs completed");
+                    context.stage(Stage.MAIN);
+                }
+            });
         }
     }
 }
