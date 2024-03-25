@@ -2,13 +2,10 @@ package com.michaelb.clc.gui.ui.main;
 
 //  imports
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentAdapter;
@@ -42,6 +39,7 @@ public class MainScreen extends JPanel {
         initStars();
 
         this.configurePanel();
+        this.addTitle();
         this.addButtons();
 
         startAnimation();
@@ -95,13 +93,32 @@ public class MainScreen extends JPanel {
         });
     }
 
+    private void addTitle() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.NORTH;
+
+        JPanel titlePanel = new JPanel(new GridBagLayout());
+        titlePanel.setOpaque(false);
+
+        JLabel title = new JLabel("COSMIC LAUNCH COMMANDER");
+        title.setFont(new Font("Nasalization Rg", Font.PLAIN, 94));
+        title.setForeground(Color.WHITE);
+        title.setOpaque(false);
+
+        titlePanel.add(title);
+        this.add(titlePanel, gbc);
+    }
+
     private void addButtons() {
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JPanel buttons = new JPanel(new GridBagLayout());
+        buttons.setOpaque(false);
 
         buttons.add(new ButtonBuilder()
                 .withText("Construct New Rocket")
@@ -122,7 +139,7 @@ public class MainScreen extends JPanel {
                 .build(), gbc);
 
         gbc.weighty = 1;
-        add(buttons, gbc);
+        this.add(buttons, gbc);
     }
 
     @Override
