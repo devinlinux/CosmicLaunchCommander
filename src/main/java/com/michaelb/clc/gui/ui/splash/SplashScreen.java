@@ -6,7 +6,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 
 import java.util.List;
 
@@ -23,21 +22,15 @@ public class SplashScreen extends JPanel {
     public SplashScreen(final Frame context) {
         this.context = context;
 
-        initComponents();
-        startMonitoring();
+        this.initComponents();
+        this.startMonitoring();
     }
 
     private void initComponents() {
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        this.setLayout(new GridBagLayout());
 
-        progressBar = new JProgressBar(0, IOUtils.jobs());
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(progressBar, gbc);
+        this.progressBar = new JProgressBar(0, IOUtils.jobs());
+        this.add(progressBar);
     }
 
     private void startMonitoring() {
@@ -55,9 +48,9 @@ public class SplashScreen extends JPanel {
                     publish(currentCompletedJobs);
                     prevCompletedJobs = currentCompletedJobs;
                 }
-                Thread.sleep(100);  // adjust the delay as needed
+                Thread.sleep(0);
             }
-            publish(IOUtils.jobs());  //  ensure progress bar reaches 100%
+            publish(IOUtils.jobs());
             return null;
         }
 
