@@ -14,7 +14,6 @@ import com.michaelb.clc.util.IOUtils;
 
 public class SplashScreen extends JPanel {
     private JProgressBar progressBar;
-    private MonitorWorker monitorWorker;
 
     public SplashScreen() {
         super();
@@ -36,8 +35,7 @@ public class SplashScreen extends JPanel {
     }
 
     private void startMonitoring() {
-        monitorWorker = new MonitorWorker();
-        monitorWorker.execute();
+        new MonitorWorker().execute();
     }
 
     private class MonitorWorker extends SwingWorker<Void, Integer> {
@@ -58,7 +56,7 @@ public class SplashScreen extends JPanel {
 
         @Override
         protected void process(List<Integer> chunks) {
-            int progress = chunks.get(chunks.size() - 1);
+            int progress = chunks.getLast();
             progressBar.setValue(progress);
             if (progress == IOUtils.jobs()) {
                 System.out.println("done... all jobs completed");
