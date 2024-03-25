@@ -20,6 +20,7 @@ import com.michaelb.clc.gui.components.Button.ButtonBuilder;
 
 public class MainScreen extends JPanel {
 
+    private static final String TITLE = "COSMIC LAUNCH COMMANDER";
     private static final Color BACKGROUND_COLOR = Color.BLACK;
 
     private static final int NUM_STARS = 256;
@@ -31,10 +32,13 @@ public class MainScreen extends JPanel {
 
     private final List<Star2D> stars;
 
+    private final GridBagConstraints gbc;
+
     public MainScreen(final Frame context) {
         this.context = context;
         this.stars = new ArrayList<>(NUM_STARS);
         this.rand = new Random();
+        this.gbc = new GridBagConstraints();
 
         initStars();
 
@@ -94,28 +98,25 @@ public class MainScreen extends JPanel {
     }
 
     private void addTitle() {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.NORTH;
+        this.gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.gbc.anchor = GridBagConstraints.NORTH;
 
         JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setOpaque(false);
 
-        JLabel title = new JLabel("COSMIC LAUNCH COMMANDER");
-        title.setFont(new Font("Nasalization Rg", Font.PLAIN, 94));
+        JLabel title = new JLabel(TITLE);
+        title.setFont(new Font("Nasalization Rg", Font.PLAIN, 74));
         title.setForeground(Color.WHITE);
         title.setOpaque(false);
 
         titlePanel.add(title);
-        this.add(titlePanel, gbc);
+        this.add(titlePanel, this.gbc);
     }
 
     private void addButtons() {
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        this.gbc.gridwidth = GridBagConstraints.REMAINDER;
+        this.gbc.anchor = GridBagConstraints.CENTER;
+        this.gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JPanel buttons = new JPanel(new GridBagLayout());
         buttons.setOpaque(false);
@@ -123,23 +124,21 @@ public class MainScreen extends JPanel {
         buttons.add(new ButtonBuilder()
                 .withText("Construct New Rocket")
                 .withHoverColor(Color.DARK_GRAY)
-                .build(), gbc);
+                .build(), this.gbc);
 
         buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
                 .withHoverColor(Color.DARK_GRAY)
-                .build(), gbc);
+                .build(), this.gbc);
 
         buttons.add(new ButtonBuilder()
                 .withText("Manage Complex")
                 .withHoverColor(Color.DARK_GRAY)
-                .withActionListener(e -> {
-                    context.stage(Stage.COMPLEX);
-                })
-                .build(), gbc);
+                .withActionListener(e -> context.stage(Stage.COMPLEX))
+                .build(), this.gbc);
 
         gbc.weighty = 1;
-        this.add(buttons, gbc);
+        this.add(buttons, this.gbc);
     }
 
     @Override
