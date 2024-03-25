@@ -10,13 +10,18 @@ import java.awt.GridBagConstraints;
 
 import java.util.List;
 
+import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.util.IOUtils;
 
 public class SplashScreen extends JPanel {
+
+    private final Frame context;
+
     private JProgressBar progressBar;
 
-    public SplashScreen() {
-        super();
+    public SplashScreen(final Frame context) {
+        this.context = context;
+
         initComponents();
         startMonitoring();
     }

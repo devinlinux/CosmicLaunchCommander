@@ -12,6 +12,7 @@ import java.awt.Component;
 import com.michaelb.clc.util.Logger;
 import com.michaelb.clc.util.ProgramInfo;
 
+import com.michaelb.clc.gui.ui.splash.SplashScreen;
 import com.michaelb.clc.gui.ui.main.MainScreen;
 import com.michaelb.clc.gui.ui.complex.ComplexScreen;
 
@@ -30,8 +31,8 @@ public class Frame extends JFrame {
     private Stage stage;
 
     public Frame() {
-        //this(Stage.SPLASH_SCREEN);
-        this(Stage.MAIN);
+        this(Stage.SPLASH_SCREEN);
+        //this(Stage.MAIN);
     }
 
     public Frame(final Stage stage) {
@@ -61,7 +62,7 @@ public class Frame extends JFrame {
 
     private void display() {
         switch (this.stage) {
-            case SPLASH_SCREEN -> System.out.println("add(new SplashScreen())");
+            case SPLASH_SCREEN -> this.add(new SplashScreen(this), BorderLayout.CENTER);
             case LOGIN -> System.out.println("add(new LoginSceren())");
             case MAIN -> this.add(new MainScreen(this), BorderLayout.CENTER);
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
