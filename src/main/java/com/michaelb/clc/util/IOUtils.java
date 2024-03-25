@@ -43,6 +43,10 @@ public final class IOUtils {
 
     private static final long SHUTDOWN_RETRY_INTERVAL = 800;
 
+    /* job counter */
+    private static int completedJobs = 0;
+    private static final int JOBS = 9;
+
     private static final String GAME_DIRECTORY = System.getProperty("user.home") + SEP + ".clc";
 
     /* utility records */
@@ -65,62 +69,55 @@ public final class IOUtils {
 
     /* utility methods */
 
-    private static void downloadFile(final String downloadLink, final String destinationPath, final String filename) {
+    private static void downloadFile(GameFile file) {
         if (!isInternetAvailable()) {
-            Logger.err("Cannot reach internet, cannot download %s".formatted(filename), "IOUtils::downloadFile");
+            Logger.err("Cannot reach internet, cannot download %s".formatted(file.name), "IOUtils::downloadFile");
             return;
         }
 
-        try {
-            URL url = new URI(downloadLink).toURL();
-            Path destination = Path.of(destinationPath);
+        executorService.submit(() -> {
+            try {
+                URL url = new URI(file.downloadLink).toURL();
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
 
-            Callable<Boolean> downloadTask;
-            try (AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(destination, StandardOpenOption.CREATE,
-                    StandardOpenOption.WRITE)) {
-                ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    long fileSize = connection.getContentLengthLong();
+                    ByteBuffer buffer = ByteBuffer.allocateDirect((int) Math.min(fileSize, Integer.MAX_VALUE));
 
-                CompletionHandler<Integer, Void> completionHandler = new CompletionHandler<Integer, Void>() {
-                    @Override
-                    public void completed(Integer result, Void attachment) {
-                        if (result == -1) {
-                            try {
-                                fileChannel.close();
-                                Logger.info("Successfully downloaded %s".formatted(filename), "IOUtils::downloadFile");
-                            } catch (IOException e) {
-                                Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
-                            }
-                        } else {
-                            buffer.flip();
-                            fileChannel.write(buffer, 0, null, this);
-                            buffer.clear();
+                    AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(
+                            file.path, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+
+                    Future<Integer> bytesRead = fileChannel.read(buffer, 0);
+                    while (!bytesRead.isDone()) {
+                        // Wait for the read operation to complete
+                    }
+
+                    int totalBytesRead = bytesRead.get();
+                    int bytesRemaining = (int) (fileSize - totalBytesRead);
+
+                    while (bytesRemaining > 0) {
+                        buffer.clear();
+                        bytesRead = fileChannel.read(buffer, totalBytesRead);
+                        while (!bytesRead.isDone()) {
+                            // Wait for the read operation to complete
                         }
+
+                        int bytesReadThisTime = bytesRead.get();
+                        totalBytesRead += bytesReadThisTime;
+                        bytesRemaining -= bytesReadThisTime;
                     }
 
-                    @Override
-                    public void failed(Throwable exc, Void attachment) {
-                        Logger.err("Error while downloading %s: %s".formatted(filename, exc.getMessage()), "IOUtils::downloadFile");
-                    }
-                };
-
-                downloadTask = () -> {
-                    try {
-                        fileChannel.write(buffer, 0, null, completionHandler);
-                        return true;
-                    } catch (Exception e) {
-                        Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
-                        return false;
-                    }
-                };
+                    fileChannel.close();
+                    Logger.info("Successfully downloaded %s".formatted(file.name), "IOUtils::downloadFile");
+                } else {
+                    Logger.err("Failed to download %s, response code: %d".formatted(file.name, responseCode), "IOUtils::downloadFile");
+                }
+            } catch (IOException | URISyntaxException | InterruptedException | ExecutionException e) {
+                Logger.err("Failed to download %s: %s".formatted(file.name, e.getMessage()), "IOUtils::downloadFile");
             }
-
-            Future<Boolean> future = executorService.submit(downloadTask);
-            future.get();
-
-            Logger.info("Successfully downloaded %s".formatted(filename), "IOUtils::downloadFile");
-        } catch (URISyntaxException | IOException | InterruptedException | ExecutionException e) {
-            Logger.err("Error while downloading %s: %s".formatted(filename, e.getMessage()), "IOUtils::downloadFile");
-        }
+        });
     }
 
     private static void shutdownExecutorService() {
@@ -171,7 +168,7 @@ public final class IOUtils {
         }
     }
 
-    private static void gameResourcesDirectory() {
+    private static void makeGameResourcesDirectory() {
         String homeDirectory = System.getProperty("user.home");
 
         File programDirectory = new File(homeDirectory + SEP + ".clc");
@@ -183,28 +180,34 @@ public final class IOUtils {
         } else {
             Logger.info("Program directory already exists", "IOUtils::gameResourcesDirectory");
         }
+        completedJobs++;
     }
 
     /* directories */
 
     private static void checkForGameResourcesDirectoryAndCreateIfNotFound() {
         createDirectoryIfNotFound(GAME_RESOURCES_DIRECTORY);
+        completedJobs++;
     }
 
     private static void checkForGameFontsDirectoryAndCreateIfNotFound() {
         createDirectoryIfNotFound(GAME_FONTS_DIRECTORY);
+        completedJobs++;
     }
 
     private static void checkForGameImagesDirectoryAndCreateIfNotFound() {
         createDirectoryIfNotFound(GAME_IMAGES_DIRECTORY);
+        completedJobs++;
     }
 
     private static void checkForGameSoundsDirectoryAndCreateIfNotFound() {
         createDirectoryIfNotFound(GAME_SOUNDS_DIRECTORY);
+        completedJobs++;
     }
 
     private static void checkForGameMusicDirectoryAndCreateIfNotFound() {
         createDirectoryIfNotFound(GAME_MUSIC_DIRECTORY);
+        completedJobs++;
     }
 
     /* files */
@@ -213,30 +216,33 @@ public final class IOUtils {
         if (Files.exists(IMAGE_ICON.path))
             Logger.info("Image icon already exists", "IOUtils::checkForImageIconAndDownloadIfNotFound");
         else
-            downloadFile(IMAGE_ICON.downloadLink, IMAGE_ICON.path.toString(), IMAGE_ICON.name);
+            downloadFile(IMAGE_ICON);
+        completedJobs++;
     }
 
     private static void checkForNoizeSportRegularFontAndDownloadIfNotFound() {
         if (Files.exists(NOIZE_SPORT_REGULAR.path))
             Logger.info("Noize Sport Regular font already exists", "IOUtils::checkForNoizeSportRegularFontAndDownloadIfNotFound");
         else
-            downloadFile(NOIZE_SPORT_REGULAR.downloadLink, NOIZE_SPORT_REGULAR.path.toString(), NOIZE_SPORT_REGULAR.name);
+            downloadFile(NOIZE_SPORT_REGULAR);
+        completedJobs++;
     }
 
     /* fonts */
 
-    public static void readNoizeSportRegularFont() {
+    private static void readNoizeSportRegularFont() {
         try {
             GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
             env.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(NOIZE_SPORT_REGULAR.path.toString())));
         } catch (IOException | FontFormatException e) {
             Logger.err("Failed to read Noize Sport Regular", "IOUtils::readNoizeSportRegularFont");
         }
+        completedJobs++;
     }
 
     /* driver methods */
 
-    public static void checkForGameDirectories() {
+    private static void checkForGameDirectories() {
         checkForGameResourcesDirectoryAndCreateIfNotFound();
         checkForGameFontsDirectoryAndCreateIfNotFound();
         checkForGameImagesDirectoryAndCreateIfNotFound();
@@ -244,17 +250,29 @@ public final class IOUtils {
         checkForGameMusicDirectoryAndCreateIfNotFound();
     }
 
-    public static void readFonts() {
+    private static void readFonts() {
         readNoizeSportRegularFont();
     }
 
     public static void checkForGameFiles() {
+        makeGameResourcesDirectory();
         checkForGameDirectories();
-        readFonts();
 
         checkForImageIconAndDownloadIfNotFound();
         checkForNoizeSportRegularFontAndDownloadIfNotFound();
 
+        readFonts();
+
         shutdownExecutorService();
+    }
+
+    /* getters */
+
+    public static int completedJobs() {
+        return completedJobs;
+    }
+
+    public static int jobs() {
+        return JOBS;
     }
 }
