@@ -232,7 +232,6 @@ public final class IOUtils {
     /* fonts */
 
     private static void readNasalizationRegularFont() {
-        //  read in the damn font, ensure there is not a buffer underflow exception
         try (InputStream is = new BufferedInputStream(new FileInputStream(NASALIZATION_REGULAR.path.toString()))) {
             Font font = Font.createFont(Font.TRUETYPE_FONT, is);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
