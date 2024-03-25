@@ -11,6 +11,7 @@ import java.awt.GridBagConstraints;
 import java.util.List;
 
 import com.michaelb.clc.gui.Frame;
+import com.michaelb.clc.gui.Stage;
 import com.michaelb.clc.util.IOUtils;
 
 public class SplashScreen extends JPanel {
@@ -41,6 +42,7 @@ public class SplashScreen extends JPanel {
 
     private void startMonitoring() {
         new MonitorWorker().execute();
+        IOUtils.checkForGameFiles();
     }
 
     private class MonitorWorker extends SwingWorker<Void, Integer> {
@@ -65,6 +67,7 @@ public class SplashScreen extends JPanel {
             progressBar.setValue(progress);
             if (progress == IOUtils.jobs()) {
                 System.out.println("done... all jobs completed");
+                context.stage(Stage.MAIN);
             }
         }
     }
