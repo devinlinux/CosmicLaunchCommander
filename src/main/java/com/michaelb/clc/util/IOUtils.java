@@ -10,10 +10,12 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.nio.channels.AsynchronousFileChannel;
-import java.nio.channels.CompletionHandler;
 
 import java.io.IOException;
 import java.io.File;
+import java.io.InputStream;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -23,7 +25,6 @@ import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -65,7 +66,7 @@ public final class IOUtils {
     /* files */
 
     private static final GameFile IMAGE_ICON = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
-    private static final GameFile NOIZE_SPORT_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "fonts/NoizeSportRegular.ttf"), "Noize Sport Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/NoizeSportRegular.ttf");
+    private static final GameFile NASALIZATION_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "nasalization-rg.otf"), "Nasalization Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/nasalization-rg.otf");
 
     /* utility methods */
 
@@ -220,22 +221,25 @@ public final class IOUtils {
         completedJobs++;
     }
 
-    private static void checkForNoizeSportRegularFontAndDownloadIfNotFound() {
-        if (Files.exists(NOIZE_SPORT_REGULAR.path))
-            Logger.info("Noize Sport Regular font already exists", "IOUtils::checkForNoizeSportRegularFontAndDownloadIfNotFound");
+    private static void checkForNasalizationRegularFontAndDownloadIfNotFound() {
+        if (Files.exists(NASALIZATION_REGULAR.path))
+            Logger.info("Nasalization Regular font already exists", "IOUtils::checkForNasalizationRegularFontAndDownloadIfNotFound");
         else
-            downloadFile(NOIZE_SPORT_REGULAR);
+            downloadFile(NASALIZATION_REGULAR);
         completedJobs++;
     }
 
     /* fonts */
 
-    private static void readNoizeSportRegularFont() {
-        try {
-            GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            env.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(NOIZE_SPORT_REGULAR.path.toString())));
+    private static void readNasalizationRegularFont() {
+        //  read in the damn font, ensure there is not a buffer underflow exception
+        try (InputStream is = new BufferedInputStream(new FileInputStream(NASALIZATION_REGULAR.path.toString()))) {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(font);
+            Logger.info("Successfully read in Nasalization Regular font", "IOUtils::readNasalizationRegularFont");
         } catch (IOException | FontFormatException e) {
-            Logger.err("Failed to read Noize Sport Regular", "IOUtils::readNoizeSportRegularFont");
+            Logger.err("Failed to read in Nasalization Regular font: %s".formatted(e.getMessage()), "IOUtils::readNasalizationRegularFont");
         }
         completedJobs++;
     }
@@ -251,7 +255,7 @@ public final class IOUtils {
     }
 
     private static void readFonts() {
-        readNoizeSportRegularFont();
+        readNasalizationRegularFont();
     }
 
     public static void checkForGameFiles() {
@@ -259,7 +263,7 @@ public final class IOUtils {
         checkForGameDirectories();
 
         checkForImageIconAndDownloadIfNotFound();
-        checkForNoizeSportRegularFontAndDownloadIfNotFound();
+        checkForNasalizationRegularFontAndDownloadIfNotFound();
 
         readFonts();
 
