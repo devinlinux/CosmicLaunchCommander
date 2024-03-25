@@ -22,24 +22,16 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URI;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-
 public final class IOUtils {
 
     private IOUtils() {}
 
     /* symbolic constants */
 
-    private static final int NUM_THREADS = 20;
-
     public static final char SEP = java.io.File.separatorChar;
 
     private static final int MAX_INTERNET_ACCESS_ATTEMPTS = 3;
     private static final int INTERNET_RETRY_INTERVAL = 200;
-
-    private static final long SHUTDOWN_RETRY_INTERVAL = 800;
 
     /* job counter */
     private static int completedJobs = 0;
@@ -79,9 +71,10 @@ public final class IOUtils {
         try {
             URL url = new URI(file.downloadLink).toURL();
             ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-            FileOutputStream fos = new FileOutputStream(file.path.toString());
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            Logger.info("Successfully downloaded %s".formatted(file.name), "IOUtils::downloadFile");
+            try (FileOutputStream fos = new FileOutputStream(file.path.toString())) {
+                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                Logger.info("Successfully downloaded %s".formatted(file.name), "IOUtils::downloadFile");
+            }
         } catch (URISyntaxException | IOException e) {
             Logger.err("Failed to download %s: %s".formatted(file.name, e.getMessage()), "IOUtils::downloadFile");
         }
