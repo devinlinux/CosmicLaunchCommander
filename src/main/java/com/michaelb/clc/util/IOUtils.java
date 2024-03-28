@@ -35,7 +35,7 @@ public final class IOUtils {
 
     /* job counter */
     private static int completedJobs = 0;
-    private static final int JOBS = 10;
+    private static final int JOBS = 11;
 
     private static final String GAME_DIRECTORY = System.getProperty("user.home") + SEP + ".clc";
 
@@ -210,6 +210,7 @@ public final class IOUtils {
 
     private static void readFonts() {
         readNasalizationRegularFont();
+        completedJobs++;
     }
 
     public static void checkForGameFiles() {

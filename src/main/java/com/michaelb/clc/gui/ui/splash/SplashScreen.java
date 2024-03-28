@@ -44,7 +44,6 @@ public class SplashScreen extends JPanel {
 
     private void startMonitoring() {
         new MonitorWorker().execute();
-        IOUtils.checkForGameFiles();
     }
 
     @Override
@@ -59,8 +58,13 @@ public class SplashScreen extends JPanel {
     }
 
     private class MonitorWorker extends SwingWorker<Void, Integer> {
+        private boolean checked = false;
         @Override
         protected Void doInBackground() {
+            if (!checked) {
+                IOUtils.checkForGameFiles();
+                checked = true;
+            }
             int prevCompletedJobs = 0;
             while (IOUtils.completedJobs() < IOUtils.jobs()) {
                 int currentCompletedJobs = IOUtils.completedJobs();
