@@ -62,7 +62,7 @@ public class Frame extends JFrame {
     private void display() {
         switch (this.stage) {
             case SPLASH_SCREEN -> this.add(new SplashScreen(this), BorderLayout.CENTER);
-            case LOGIN -> System.out.println("add(new LoginSceren())");
+            case LOGIN -> System.out.println("add(new LoginScreen())");
             case MAIN -> this.add(new MainScreen(this), BorderLayout.CENTER);
             case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
             case LAUNCH -> System.out.println("add(new LaunchScreen())");
