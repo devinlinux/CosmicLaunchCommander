@@ -68,8 +68,8 @@ public class SplashScreen extends JPanel {
                     publish(currentCompletedJobs);
                     prevCompletedJobs = currentCompletedJobs;
                 }
-                // HACK: why does this work
-                System.out.print("");
+                if (!SwingUtilities.isEventDispatchThread())
+                    SwingUtilities.invokeLater(() -> {});
             }
             return null;
         }
