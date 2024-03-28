@@ -3,6 +3,9 @@ package com.michaelb.clc.physics.celestial.bodies;
 //  imports
 import com.michaelb.clc.physics.util.Position3D;
 
+import static com.michaelb.clc.math.MathUtil.root;
+import static com.michaelb.clc.math.MathUtil.square;
+
 public abstract class CelestialBody {
 
     private final String name;
@@ -18,6 +21,10 @@ public abstract class CelestialBody {
         this.mass = mass;
         this.radius = radius;
         this.position = new Position3D(x, y, z);
+    }
+
+    public double distanceTo(final CelestialBody other) {
+        return root(square(this.x() - other.x()) + square(this.y() - other.y()) + square(this.z() - other.z()));
     }
 
     public String name() { return this.name; }
