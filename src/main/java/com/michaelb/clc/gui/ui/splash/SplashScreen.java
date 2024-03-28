@@ -2,18 +2,14 @@ package com.michaelb.clc.gui.ui.splash;
 
 //  imports
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.swing.SwingUtilities;
 import javax.imageio.ImageIO;
 
-import java.awt.GridBagLayout;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import java.io.File;
-
-import java.util.List;
 
 import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.Stage;
@@ -26,20 +22,10 @@ public class SplashScreen extends JPanel {
 
     private final Frame context;
 
-    private JProgressBar progressBar;
-
     public SplashScreen(final Frame context) {
         this.context = context;
 
-        this.initComponents();
         this.startMonitoring();
-    }
-
-    private void initComponents() {
-        this.setLayout(new GridBagLayout());
-
-        this.progressBar = new JProgressBar(0, IOUtils.jobs());
-        this.add(progressBar);
     }
 
     private void startMonitoring() {
@@ -79,18 +65,8 @@ public class SplashScreen extends JPanel {
         }
 
         @Override
-        protected void process(List<Integer> chunks) {
-            int progress = chunks.getLast();
-            SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
-        }
-
-        @Override
         protected void done() {
-            SwingUtilities.invokeLater(() -> {
-                progressBar.setValue(IOUtils.jobs());
-                System.out.println("done... all jobs completed");
-                context.stage(Stage.MAIN);
-            });
+            SwingUtilities.invokeLater(() -> context.stage(Stage.MAIN));
         }
     }
 }
