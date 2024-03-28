@@ -14,6 +14,8 @@ import com.michaelb.clc.util.ProgramInfo;
 
 import com.michaelb.clc.gui.ui.splash.SplashScreen;
 import com.michaelb.clc.gui.ui.main.MainScreen;
+import com.michaelb.clc.gui.ui.launch.LaunchScreen;
+import com.michaelb.clc.gui.ui.construction.ConstructionScreen;
 import com.michaelb.clc.gui.ui.complex.ComplexScreen;
 
 import static com.michaelb.clc.util.IOUtils.IMAGE_ICON_PATH;
@@ -64,8 +66,8 @@ public class Frame extends JFrame {
             case SPLASH_SCREEN -> this.add(new SplashScreen(this), BorderLayout.CENTER);
             case LOGIN -> System.out.println("add(new LoginScreen())");
             case MAIN -> this.add(new MainScreen(this), BorderLayout.CENTER);
-            case CONSTRUCTION -> System.out.println("add(new ConstructionScreen())");
-            case LAUNCH -> System.out.println("add(new LaunchScreen())");
+            case CONSTRUCTION -> this.add(new ConstructionScreen(this), BorderLayout.CENTER);
+            case LAUNCH -> this.add(new LaunchScreen(this), BorderLayout.CENTER);
             case COMPLEX -> this.add(new ComplexScreen(this), BorderLayout.CENTER);
             case MISSION_CONTROL -> System.out.println("add new MissionControlScreen())");
         }
