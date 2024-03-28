@@ -103,7 +103,7 @@ public final class IOUtils {
         return false;
     }
 
-    private static void createDirectoryIfNotFound(final GameDirectory gameDirectory) {
+    private static void mkdir(final GameDirectory gameDirectory) {
         if (Files.exists(gameDirectory.path))
             Logger.info("Directory %s already exists".formatted(gameDirectory.name), "IOUtils::createDirectoryIfNotFound");
         else {
@@ -133,34 +133,34 @@ public final class IOUtils {
 
     /* directories */
 
-    private static void checkForGameResourcesDirectoryAndCreateIfNotFound() {
-        createDirectoryIfNotFound(GAME_RESOURCES_DIRECTORY);
+    private static void ensureResourcesDir() {
+        mkdir(GAME_RESOURCES_DIRECTORY);
         completedJobs++;
     }
 
-    private static void checkForGameFontsDirectoryAndCreateIfNotFound() {
-        createDirectoryIfNotFound(GAME_FONTS_DIRECTORY);
+    private static void ensureFontsDir() {
+        mkdir(GAME_FONTS_DIRECTORY);
         completedJobs++;
     }
 
-    private static void checkForGameImagesDirectoryAndCreateIfNotFound() {
-        createDirectoryIfNotFound(GAME_IMAGES_DIRECTORY);
+    private static void ensureImagesDir() {
+        mkdir(GAME_IMAGES_DIRECTORY);
         completedJobs++;
     }
 
-    private static void checkForGameSoundsDirectoryAndCreateIfNotFound() {
-        createDirectoryIfNotFound(GAME_SOUNDS_DIRECTORY);
+    private static void ensureSoundsDir() {
+        mkdir(GAME_SOUNDS_DIRECTORY);
         completedJobs++;
     }
 
-    private static void checkForGameMusicDirectoryAndCreateIfNotFound() {
-        createDirectoryIfNotFound(GAME_MUSIC_DIRECTORY);
+    private static void ensureMusicDir() {
+        mkdir(GAME_MUSIC_DIRECTORY);
         completedJobs++;
     }
 
     /* files */
 
-    private static void checkForImageIconAndDownloadIfNotFound() {
+    private static void verifyImageIcon() {
         if (Files.exists(IMAGE_ICON.path))
             Logger.info("Image icon already exists", "IOUtils::checkForImageIconAndDownloadIfNotFound");
         else
@@ -168,7 +168,7 @@ public final class IOUtils {
         completedJobs++;
     }
 
-    private static void checkForSplashScreenBackgroundAndDownloadIfNotFound() {
+    private static void verifySplashBackground() {
         if (Files.exists(SPLASH_SCREEN_BACKGROUND.path))
             Logger.info("Splash screen background already exists", "IOUtils::checkForSplashScreenBackgroundAndDownloadIfNotFound");
         else
@@ -176,7 +176,7 @@ public final class IOUtils {
         completedJobs++;
     }
 
-    private static void checkForNasalizationRegularFontAndDownloadIfNotFound() {
+    private static void verifyNasalizationRg() {
         if (Files.exists(NASALIZATION_REGULAR.path))
             Logger.info("Nasalization Regular font already exists", "IOUtils::checkForNasalizationRegularFontAndDownloadIfNotFound");
         else
@@ -186,7 +186,7 @@ public final class IOUtils {
 
     /* fonts */
 
-    private static void readNasalizationRegularFont() {
+    private static void readNasalizationRg() {
         try (InputStream is = new BufferedInputStream(new FileInputStream(NASALIZATION_REGULAR.path.toString()))) {
             Font font = Font.createFont(Font.TRUETYPE_FONT, is);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -200,28 +200,28 @@ public final class IOUtils {
 
     /* driver methods */
 
-    private static void checkForGameDirectories() {
-        checkForGameResourcesDirectoryAndCreateIfNotFound();
-        checkForGameFontsDirectoryAndCreateIfNotFound();
-        checkForGameImagesDirectoryAndCreateIfNotFound();
-        checkForGameSoundsDirectoryAndCreateIfNotFound();
-        checkForGameMusicDirectoryAndCreateIfNotFound();
+    private static void ensureAllGameDirs() {
+        ensureResourcesDir();
+        ensureFontsDir();
+        ensureImagesDir();
+        ensureSoundsDir();
+        ensureMusicDir();
     }
 
-    private static void readFonts() {
-        readNasalizationRegularFont();
+    private static void readAllFonts() {
+        readNasalizationRg();
         completedJobs++;
     }
 
     public static void checkForGameFiles() {
         makeGameResourcesDirectory();
-        checkForGameDirectories();
+        ensureAllGameDirs();
 
-        checkForImageIconAndDownloadIfNotFound();
-        checkForSplashScreenBackgroundAndDownloadIfNotFound();
-        checkForNasalizationRegularFontAndDownloadIfNotFound();
+        verifyImageIcon();
+        verifySplashBackground();
+        verifyNasalizationRg();
 
-        readFonts();
+        readAllFonts();
     }
 
     /* getters */
