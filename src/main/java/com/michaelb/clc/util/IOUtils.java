@@ -35,7 +35,7 @@ public final class IOUtils {
 
     /* job counter */
     private static int completedJobs = 0;
-    private static final int JOBS = 9;
+    private static final int JOBS = 10;
 
     private static final String GAME_DIRECTORY = System.getProperty("user.home") + SEP + ".clc";
 
@@ -55,10 +55,12 @@ public final class IOUtils {
     /* files */
 
     private static final GameFile IMAGE_ICON = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
+    private static final GameFile SPLASH_SCREEN_BACKGROUND = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "splash.png"), "splash screen background", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/splash.png");
     private static final GameFile NASALIZATION_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "nasalization-rg.otf"), "Nasalization Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/nasalization-rg.otf");
 
     /* file paths */
     public static final String IMAGE_ICON_PATH = IMAGE_ICON.path.toString();
+    public static final String SPLASH_SCREEN_BACKGROUND_PATH = SPLASH_SCREEN_BACKGROUND.path.toString();
 
     /* utility methods */
 
@@ -166,6 +168,14 @@ public final class IOUtils {
         completedJobs++;
     }
 
+    private static void checkForSplashScreenBackgroundAndDownloadIfNotFound() {
+        if (Files.exists(SPLASH_SCREEN_BACKGROUND.path))
+            Logger.info("Splash screen background already exists", "IOUtils::checkForSplashScreenBackgroundAndDownloadIfNotFound");
+        else
+            downloadFile(SPLASH_SCREEN_BACKGROUND);
+        completedJobs++;
+    }
+
     private static void checkForNasalizationRegularFontAndDownloadIfNotFound() {
         if (Files.exists(NASALIZATION_REGULAR.path))
             Logger.info("Nasalization Regular font already exists", "IOUtils::checkForNasalizationRegularFontAndDownloadIfNotFound");
@@ -207,6 +217,7 @@ public final class IOUtils {
         checkForGameDirectories();
 
         checkForImageIconAndDownloadIfNotFound();
+        checkForSplashScreenBackgroundAndDownloadIfNotFound();
         checkForNasalizationRegularFontAndDownloadIfNotFound();
 
         readFonts();

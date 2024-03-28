@@ -16,7 +16,7 @@ import com.michaelb.clc.gui.ui.splash.SplashScreen;
 import com.michaelb.clc.gui.ui.main.MainScreen;
 import com.michaelb.clc.gui.ui.complex.ComplexScreen;
 
-import static com.michaelb.clc.util.IOUtils.SEP;
+import static com.michaelb.clc.util.IOUtils.IMAGE_ICON_PATH;
 
 public class Frame extends JFrame {
 
@@ -26,13 +26,12 @@ public class Frame extends JFrame {
     private static final int INIT_WIDTH = 1700;
     private static final int INIT_HEIGHT = 1000;
 
-    private static final ImageIcon ICON = new ImageIcon("src%smain%sresources%simages%simage_icon.png".formatted(SEP, SEP, SEP, SEP));
+    private static final ImageIcon ICON = new ImageIcon(IMAGE_ICON_PATH);
 
     private Stage stage;
 
     public Frame() {
         this(Stage.SPLASH_SCREEN);
-        //this(Stage.MAIN);
     }
 
     public Frame(final Stage stage) {

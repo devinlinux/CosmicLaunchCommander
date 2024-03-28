@@ -5,14 +5,22 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.swing.SwingUtilities;
+import javax.imageio.ImageIO;
 
 import java.awt.GridBagLayout;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import java.io.File;
 
 import java.util.List;
 
 import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.Stage;
 import com.michaelb.clc.util.IOUtils;
+import com.michaelb.clc.util.Logger;
+
+import static com.michaelb.clc.util.IOUtils.SPLASH_SCREEN_BACKGROUND_PATH;
 
 public class SplashScreen extends JPanel {
 
@@ -39,10 +47,21 @@ public class SplashScreen extends JPanel {
         IOUtils.checkForGameFiles();
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            BufferedImage image = ImageIO.read(new File(SPLASH_SCREEN_BACKGROUND_PATH));
+            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), null);
+        } catch (Exception e) {
+            Logger.err("Failed to load splash screen background image", "SplashScreen::paintComponent");
+        }
+    }
+
     private class MonitorWorker extends SwingWorker<Void, Integer> {
         @Override
         protected Void doInBackground() throws Exception {
-            SwingUtilities.invokeLater(() -> initComponents());
+            SwingUtilities.invokeLater(SplashScreen.this::initComponents);
             int prevCompletedJobs = 0;
             while (IOUtils.completedJobs() < IOUtils.jobs()) {
                 int currentCompletedJobs = IOUtils.completedJobs();
