@@ -60,8 +60,7 @@ public class SplashScreen extends JPanel {
 
     private class MonitorWorker extends SwingWorker<Void, Integer> {
         @Override
-        protected Void doInBackground() throws Exception {
-            SwingUtilities.invokeLater(SplashScreen.this::initComponents);
+        protected Void doInBackground() {
             int prevCompletedJobs = 0;
             while (IOUtils.completedJobs() < IOUtils.jobs()) {
                 int currentCompletedJobs = IOUtils.completedJobs();
@@ -69,21 +68,24 @@ public class SplashScreen extends JPanel {
                     publish(currentCompletedJobs);
                     prevCompletedJobs = currentCompletedJobs;
                 }
-                Thread.sleep(1);
+                // HACK: why does this work
+                System.out.print("");
             }
-            publish(IOUtils.jobs());
             return null;
         }
 
         @Override
         protected void process(List<Integer> chunks) {
             int progress = chunks.getLast();
+            SwingUtilities.invokeLater(() -> progressBar.setValue(progress));
+        }
+
+        @Override
+        protected void done() {
             SwingUtilities.invokeLater(() -> {
-                progressBar.setValue(progress);
-                if (progress == IOUtils.jobs()) {
-                    System.out.println("done... all jobs completed");
-                    context.stage(Stage.MAIN);
-                }
+                progressBar.setValue(IOUtils.jobs());
+                System.out.println("done... all jobs completed");
+                context.stage(Stage.MAIN);
             });
         }
     }
