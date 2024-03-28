@@ -1,30 +1,20 @@
-package com.michaelb.clc.physics.celestial.bodies;
+package com.michaelb.clc.ship;
 
 //  imports
 import com.michaelb.clc.physics.util.Position3D;
 
-import static com.michaelb.clc.math.MathUtil.root;
-import static com.michaelb.clc.math.MathUtil.square;
-
-public abstract sealed class CelestialBody permits Planet, Star {
+public class Spacecraft {
 
     private final String name;
     private final double mass;
     private final double radius;
-
     private final Position3D position;
 
-    private double velocity;
-
-    public CelestialBody(final String name, final double mass, final double radius, final double x, final double y, final double z, final double velocity) {
+    public Spacecraft(final String name, final double mass, final double radius, final double x, final double y, final double z) {
         this.name = name;
         this.mass = mass;
         this.radius = radius;
         this.position = new Position3D(x, y, z);
-    }
-
-    public final double distanceTo(final CelestialBody other) {
-        return root(square(this.x() - other.x()) + square(this.y() - other.y()) + square(this.z() - other.z()));
     }
 
     public String name() { return this.name; }
@@ -35,6 +25,4 @@ public abstract sealed class CelestialBody permits Planet, Star {
     public double x() { return this.position.x; }
     public double y() { return this.position.y; }
     public double z() { return this.position.z; }
-
-    public double velocity() { return this.velocity; }
 }
