@@ -65,8 +65,8 @@ public final class MathUtil {
     public record Polar(double r, double theta) {
         public Rectangular toRectangular() {
             return new Rectangular(
-                this.r * cos(Math.toRadians(theta)),
-                this.r * sin(Math.toRadians(theta)));
+                this.r * cos(theta),
+                this.r * sin(theta));
         }
     }
 
