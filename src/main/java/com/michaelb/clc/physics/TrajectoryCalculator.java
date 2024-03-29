@@ -33,8 +33,9 @@ public final class TrajectoryCalculator {
         double fz = 0.0;
 
         for (CelestialBody body : this.system.members()) {
-            double theta = 
+            double theta = 0;
         }
+        return null;
     }
 
     private double gravitationalForce(CelestialBody body) {

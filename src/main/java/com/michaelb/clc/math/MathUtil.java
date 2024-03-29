@@ -33,15 +33,15 @@ public final class MathUtil {
     }
 
     public static double arctan(double theta) {
-        return Math.atan(Math.toRadians(theta));
+        return Math.atan(theta);
     }
 
     public static double arcsin(double theta) {
-        return Math.asin(Math.toRadians(theta));
+        return Math.asin(theta);
     }
 
     public static double arccos(double theta) {
-        return Math.acos(Math.toRadians(theta));
+        return Math.acos(theta);
     }
 
     /* coordinate conversions  */
@@ -72,8 +72,8 @@ public final class MathUtil {
 
     public record Spherical(double r, double theta, double phi) {
         public Cartesian3D toCartesian3D() {
-            return new Cartesian3D(r * sin(Math.toRadians(this.theta)) * cos(Math.toRadians(this.phi)),
-                                   r * sin(Math.toRadians(this.theta)) * sin(Math.toRadians(this.phi)),
+            return new Cartesian3D(r * sin(this.theta) * cos(this.phi),
+                                   r * sin(this.theta) * sin(this.phi),
                                    r * cos(theta));
         }
     }
