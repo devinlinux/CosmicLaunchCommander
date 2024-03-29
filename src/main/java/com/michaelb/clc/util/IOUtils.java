@@ -35,14 +35,13 @@ public final class IOUtils {
 
     /* job counter */
     private static int completedJobs = 0;
-    private static final int JOBS = 11;
+    private static final int JOBS = 12;
 
     private static final String GAME_DIRECTORY = System.getProperty("user.home") + SEP + ".clc";
 
     /* utility records */
     private record GameDirectory(Path path, String name) {}
     private record GameFile(Path path, String name, String downloadLink) {}
-
 
     /* directories */
 
@@ -51,12 +50,16 @@ public final class IOUtils {
     private static final GameDirectory GAME_IMAGES_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "images"), "game images");
     private static final GameDirectory GAME_SOUNDS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "sounds"), "game sounds");
     private static final GameDirectory GAME_MUSIC_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "music"), "game music");
+    private static final GameDirectory GAME_LOGS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "logs"), "game logs");
 
     /* files */
 
     private static final GameFile IMAGE_ICON = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
     private static final GameFile SPLASH_SCREEN_BACKGROUND = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "splash.png"), "splash screen background", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/splash.png");
     private static final GameFile NASALIZATION_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "nasalization-rg.otf"), "Nasalization Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/nasalization-rg.otf");
+
+    /* directory paths */
+    public static final String LOGS_DIRECTORY_PATH = GAME_LOGS_DIRECTORY.path.toString();
 
     /* file paths */
     public static final String IMAGE_ICON_PATH = IMAGE_ICON.path.toString();
@@ -158,6 +161,11 @@ public final class IOUtils {
         completedJobs++;
     }
 
+    private static void ensureLogsDir() {
+        mkdir(GAME_LOGS_DIRECTORY);
+        completedJobs++;
+    }
+
     /* files */
 
     private static void verifyImageIcon() {
@@ -206,6 +214,7 @@ public final class IOUtils {
         ensureImagesDir();
         ensureSoundsDir();
         ensureMusicDir();
+        ensureLogsDir();
     }
 
     private static void readAllFonts() {

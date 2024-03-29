@@ -32,7 +32,7 @@ public final class Logger {
     private static final Map<Level, Integer> logCountsMap;
     private static int logNumber;
 
-    private static final String PREFERRED_LOG_DIRECTORY = "logs%s".formatted(com.michaelb.clc.util.IOUtils.SEP);
+    private static final String PREFERRED_LOG_DIRECTORY = com.michaelb.clc.util.IOUtils.LOGS_DIRECTORY_PATH;
     private static Path logFilePath;
 
     private static boolean INSTANCE = false;
