@@ -8,6 +8,13 @@ import com.michaelb.clc.physics.celestial.bodies.CelestialBody;
 import static com.michaelb.clc.math.MathUtil.root;
 import static com.michaelb.clc.math.MathUtil.square;
 
+import static com.michaelb.clc.math.MathUtil.tan;
+import static com.michaelb.clc.math.MathUtil.sin;
+import static com.michaelb.clc.math.MathUtil.cos;
+import static com.michaelb.clc.math.MathUtil.arctan;
+import static com.michaelb.clc.math.MathUtil.arcsin;
+import static com.michaelb.clc.math.MathUtil.arccos;
+
 public final class TrajectoryCalculator {
 
     private static final double G = 6.67743e-11;
@@ -26,7 +33,7 @@ public final class TrajectoryCalculator {
         double fz = 0.0;
 
         for (CelestialBody body : this.system.members()) {
-
+            double theta = 
         }
     }
 
