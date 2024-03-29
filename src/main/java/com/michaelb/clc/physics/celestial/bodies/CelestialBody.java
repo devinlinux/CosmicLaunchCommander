@@ -24,7 +24,13 @@ public abstract sealed class CelestialBody permits Planet, Star {
     }
 
     public final double distanceTo(final CelestialBody other) {
-        return root(square(this.x() - other.x()) + square(this.y() - other.y()) + square(this.z() - other.z()));
+        return distanceTo(other.position);
+    }
+
+    public final double distanceTo(final Position3D other) {
+        return root(square(this.position.x - other.x) +
+                    square(this.position.y - other.y) +
+                    square(this.position.z - other.z));
     }
 
     public String name() { return this.name; }
