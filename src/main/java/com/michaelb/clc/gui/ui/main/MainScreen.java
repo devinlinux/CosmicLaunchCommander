@@ -124,19 +124,19 @@ public class MainScreen extends JPanel {
         buttons.add(new ButtonBuilder()
                 .withText("Construct New Rocket")
                 .withHoverColor(Color.DARK_GRAY)
-                .withActionListener(e -> context.stage(Stage.CONSTRUCTION))
+                .withActionListener(_ -> context.stage(Stage.CONSTRUCTION))
                 .build(), this.gbc);
 
         buttons.add(new ButtonBuilder()
                 .withText("Launch Rocket")
                 .withHoverColor(Color.DARK_GRAY)
-                .withActionListener(e -> context.stage(Stage.LAUNCH))
+                .withActionListener(_ -> context.stage(Stage.LAUNCH))
                 .build(), this.gbc);
 
         buttons.add(new ButtonBuilder()
                 .withText("Manage Complex")
                 .withHoverColor(Color.DARK_GRAY)
-                .withActionListener(e -> context.stage(Stage.COMPLEX))
+                .withActionListener(_ -> context.stage(Stage.COMPLEX))
                 .build(), this.gbc);
 
         gbc.weighty = 1;

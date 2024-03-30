@@ -45,7 +45,7 @@ public final class Logger {
 
         try {
             LocalDateTime currentTime = LocalDateTime.now();
-            String fileName = currentTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".log";
+            String fileName = STR."\{currentTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))}.log";
             Path dir = Paths.get(PREFERRED_LOG_DIRECTORY);
             if (!Files.exists(dir))
                 Files.createDirectory(dir);

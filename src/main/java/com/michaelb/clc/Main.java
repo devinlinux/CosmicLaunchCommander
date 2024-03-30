@@ -1,6 +1,5 @@
 package com.michaelb.clc;
 import com.michaelb.clc.physics.*;
-import com.michaelb.clc.physics.celestial.*;
 import com.michaelb.clc.physics.celestial.bodies.CelestialBody;
 import com.michaelb.clc.physics.celestial.bodies.Planet;
 import com.michaelb.clc.physics.celestial.StarSystem;
@@ -14,7 +13,7 @@ public interface Main {
         Spacecraft c = new Spacecraft("", 10, 1, 0, 0, 0);
 
         TrajectoryCalculator calc = new TrajectoryCalculator(c, s);
-        System.out.println(calc.netForce());
+        System.out.println(calc.netGravitationalForce());
 //        initLogger();
 //        javax.swing.SwingUtilities.invokeLater(com.michaelb.clc.gui.Frame::new);
     }

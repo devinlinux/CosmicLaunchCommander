@@ -37,7 +37,7 @@ public final class IOUtils {
     private static int completedJobs = 0;
     private static final int JOBS = 12;
 
-    private static final String GAME_DIRECTORY = System.getProperty("user.home") + SEP + ".clc";
+    private static final String GAME_DIRECTORY = STR."\{System.getProperty("user.home")}\{SEP}.clc";
 
     /* utility records */
     private record GameDirectory(Path path, String name) {}
@@ -45,18 +45,18 @@ public final class IOUtils {
 
     /* directories */
 
-    private static final GameDirectory GAME_RESOURCES_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources"), "game resources");
-    private static final GameDirectory GAME_FONTS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "fonts"), "game fonts");
-    private static final GameDirectory GAME_IMAGES_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "images"), "game images");
-    private static final GameDirectory GAME_SOUNDS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "sounds"), "game sounds");
-    private static final GameDirectory GAME_MUSIC_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "resources" + SEP + "music"), "game music");
-    private static final GameDirectory GAME_LOGS_DIRECTORY = new GameDirectory(Path.of(GAME_DIRECTORY + SEP + "logs"), "game logs");
+    private static final GameDirectory GAME_RESOURCES_DIRECTORY = new GameDirectory(Path.of(STR."\{GAME_DIRECTORY}\{SEP}resources"), "game resources");
+    private static final GameDirectory GAME_FONTS_DIRECTORY = new GameDirectory(Path.of(STR."\{GAME_DIRECTORY}\{SEP}resources\{SEP}fonts"), "game fonts");
+    private static final GameDirectory GAME_IMAGES_DIRECTORY = new GameDirectory(Path.of(STR."\{GAME_DIRECTORY}\{SEP}resources\{SEP}images"), "game images");
+    private static final GameDirectory GAME_SOUNDS_DIRECTORY = new GameDirectory(Path.of(STR."\{GAME_DIRECTORY}\{SEP}resources\{SEP}sounds"), "game sounds");
+    private static final GameDirectory GAME_MUSIC_DIRECTORY = new GameDirectory(Path.of(STR."\{GAME_DIRECTORY}\{SEP}resources\{SEP}music"), "game music");
+    private static final GameDirectory GAME_LOGS_DIRECTORY = new GameDirectory(Path.of(STR."\{GAME_DIRECTORY}\{SEP}logs"), "game logs");
 
     /* files */
 
-    private static final GameFile IMAGE_ICON = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
-    private static final GameFile SPLASH_SCREEN_BACKGROUND = new GameFile(Path.of(GAME_IMAGES_DIRECTORY.path.toString() + SEP + "splash.png"), "splash screen background", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/splash.png");
-    private static final GameFile NASALIZATION_REGULAR = new GameFile(Path.of(GAME_FONTS_DIRECTORY.path.toString() + SEP + "nasalization-rg.otf"), "Nasalization Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/nasalization-rg.otf");
+    private static final GameFile IMAGE_ICON = new GameFile(Path.of(STR."\{GAME_IMAGES_DIRECTORY.path.toString()}\{SEP}image_icon.png"), "image icon", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/image_icon.png");
+    private static final GameFile SPLASH_SCREEN_BACKGROUND = new GameFile(Path.of(STR."\{GAME_IMAGES_DIRECTORY.path.toString()}\{SEP}splash.png"), "splash screen background", "https://raw.githubusercontent.com/devinlinux/CosmicLaunchCommander/master/src/main/resources/images/splash.png");
+    private static final GameFile NASALIZATION_REGULAR = new GameFile(Path.of(STR."\{GAME_FONTS_DIRECTORY.path.toString()}\{SEP}nasalization-rg.otf"), "Nasalization Regular", "https://github.com/devinlinux/CosmicLaunchCommander/raw/master/src/main/resources/fonts/nasalization-rg.otf");
 
     /* directory paths */
     public static final String LOGS_DIRECTORY_PATH = GAME_LOGS_DIRECTORY.path.toString();
@@ -122,7 +122,7 @@ public final class IOUtils {
     private static void makeGameResourcesDirectory() {
         String homeDirectory = System.getProperty("user.home");
 
-        File programDirectory = new File(homeDirectory + SEP + ".clc");
+        File programDirectory = new File(STR."\{homeDirectory}\{SEP}.clc");
         if (!programDirectory.exists()) {
             if (programDirectory.mkdir())
                 Logger.info("Created program directory", "IOUtils::gameResourcesDirectory");
