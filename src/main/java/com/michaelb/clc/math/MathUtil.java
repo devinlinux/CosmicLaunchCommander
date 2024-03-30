@@ -20,6 +20,10 @@ public final class MathUtil {
         return Math.sqrt(n);
     }
 
+    public static double abs(double n) {
+        return Math.abs(n);
+    }
+
     public static double tan(double theta) {
         return Math.tan(Math.toRadians(theta));
     }

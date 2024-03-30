@@ -5,15 +5,11 @@ import com.michaelb.clc.ship.Spacecraft;
 import com.michaelb.clc.physics.celestial.StarSystem;
 import com.michaelb.clc.physics.celestial.bodies.CelestialBody;
 
-import static com.michaelb.clc.math.MathUtil.root;
 import static com.michaelb.clc.math.MathUtil.square;
+import static com.michaelb.clc.math.MathUtil.abs;
 
-import static com.michaelb.clc.math.MathUtil.tan;
-import static com.michaelb.clc.math.MathUtil.sin;
-import static com.michaelb.clc.math.MathUtil.cos;
-import static com.michaelb.clc.math.MathUtil.arctan;
-import static com.michaelb.clc.math.MathUtil.arcsin;
-import static com.michaelb.clc.math.MathUtil.arccos;
+import static com.michaelb.clc.math.MathUtil.Cartesian3D;
+import static com.michaelb.clc.math.MathUtil.Spherical;
 
 public final class TrajectoryCalculator {
 
@@ -27,15 +23,27 @@ public final class TrajectoryCalculator {
         this.system = system;
     }
 
-    public Force3D netForce() {
+    public Spherical netForce() {
         double fx = 0.0;
         double fy = 0.0;
         double fz = 0.0;
 
         for (CelestialBody body : this.system.members()) {
-            double theta = 0;
+            double magnitude = gravitationalForce(body);
+            Spherical angles = new Cartesian3D(
+                    abs(body.x() - craft.x()),
+                    abs(body.y() - craft.y()),
+                    abs(body.z() - craft.z())).toSpherical();
+
+            Spherical force = new Spherical(magnitude, angles.theta(), angles.phi());
+            Cartesian3D components = force.toCartesian3D();
+
+            fx += components.x();
+            fy += components.y();
+            fz += components.z();
         }
-        return null;
+
+        return new Cartesian3D(fx, fy, fz).toSpherical();
     }
 
     private double gravitationalForce(CelestialBody body) {
