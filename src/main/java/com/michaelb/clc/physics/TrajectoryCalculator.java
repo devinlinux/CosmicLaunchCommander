@@ -6,7 +6,6 @@ import com.michaelb.clc.physics.celestial.StarSystem;
 import com.michaelb.clc.physics.celestial.bodies.CelestialBody;
 
 import static com.michaelb.clc.math.MathUtil.square;
-import static com.michaelb.clc.math.MathUtil.abs;
 
 import static com.michaelb.clc.math.MathUtil.Cartesian3D;
 import static com.michaelb.clc.math.MathUtil.Spherical;
@@ -31,9 +30,10 @@ public final class TrajectoryCalculator {
         for (CelestialBody body : this.system.members()) {
             double magnitude = gravitationalForce(body);
             Spherical angles = new Cartesian3D(
-                    abs(body.x() - craft.x()),
-                    abs(body.y() - craft.y()),
-                    abs(body.z() - craft.z())).toSpherical();
+                    body.x() - craft.x(),
+                    body.y() - craft.y(),
+                    body.z() - craft.z()).toSpherical();
+            System.out.println("Distance: " + angles.phi());
 
             Spherical force = new Spherical(magnitude, angles.theta(), angles.phi());
             Cartesian3D components = force.toCartesian3D();
@@ -42,6 +42,8 @@ public final class TrajectoryCalculator {
             fy += components.y();
             fz += components.z();
         }
+
+        System.out.println("Fx: " + fx + " Fy: " + fy + " Fz: " + fz);
 
         return new Cartesian3D(fx, fy, fz).toSpherical();
     }

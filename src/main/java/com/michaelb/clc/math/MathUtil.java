@@ -61,8 +61,8 @@ public final class MathUtil {
         public Spherical toSpherical() {
             return new Spherical(
                     root(square(this.x) + square(this.y) + square(this.z)),
-                    Math.toDegrees(arccos(this.z / root(square(this.x) + square(this.y) + square(this.z)))),
-                    Math.toDegrees(arctan(this.y / this.x)));
+                    this.z == 0 ? 0 : Math.toDegrees(arccos(z / root(square(this.x) + square(this.y) + square(this.z)))),
+                    this.x  == 0 || this.y == 0 ? 0 : Math.toDegrees(arctan(this.y / this.x)));
         }
     }
 
