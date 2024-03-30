@@ -5,7 +5,12 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentAdapter;
@@ -17,6 +22,7 @@ import java.util.Random;
 import com.michaelb.clc.gui.Frame;
 import com.michaelb.clc.gui.Stage;
 import com.michaelb.clc.gui.components.Button.ButtonBuilder;
+import com.michaelb.clc.util.Logger;
 
 public class MainScreen extends JPanel {
 
@@ -80,7 +86,7 @@ public class MainScreen extends JPanel {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
-                    System.err.printf("Error sleeping for star animation thread: %s%n", e.getMessage());
+                    Logger.err("Error sleeping for star animation thread: %s".formatted(e.getMessage()), "MainScreen::startAnimation");
                 }
             }
         }).start();
@@ -139,6 +145,12 @@ public class MainScreen extends JPanel {
                 .withActionListener(_ -> context.stage(Stage.COMPLEX))
                 .build(), this.gbc);
 
+        buttons.add(new ButtonBuilder()
+                .withText("Mission Control")
+                .withHoverColor(Color.DARK_GRAY)
+                .withActionListener(_ -> context.stage(Stage.MISSION_CONTROL))
+                .build(), this.gbc);
+
         gbc.weighty = 1;
         this.add(buttons, this.gbc);
     }
@@ -147,10 +159,10 @@ public class MainScreen extends JPanel {
     public void paintComponent(final Graphics g) {
         super.paintComponent(g);
 
-        Graphics2D g2D = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D) g;
 
-        g2D.setColor(BACKGROUND_COLOR);
-        g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g2.setColor(BACKGROUND_COLOR);
+        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         for (Star2D star : this.stars)
             star.draw(g);
