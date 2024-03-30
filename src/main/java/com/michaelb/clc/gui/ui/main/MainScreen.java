@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -159,10 +158,8 @@ public class MainScreen extends JPanel {
     public void paintComponent(final Graphics g) {
         super.paintComponent(g);
 
-        Graphics2D g2 = (Graphics2D) g;
-
-        g2.setColor(BACKGROUND_COLOR);
-        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.setColor(BACKGROUND_COLOR);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         for (Star2D star : this.stars)
             star.draw(g);
